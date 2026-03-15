@@ -1,7 +1,6 @@
 // Game State
 let state = {
     emeralds: 1000,
-    boosters: 10,
     inventory: [], 
     isOpening: false
 };
@@ -61,7 +60,7 @@ auth.onAuthStateChanged(async (user) => {
         document.getElementById('user-logged-in').style.display = 'none';
         
         // Reset state local
-        state = { emeralds: 1000, boosters: 10, inventory: [], isOpening: false };
+        state = { emeralds: 1000, inventory: [], isOpening: false };
         updateUI();
     }
 });
@@ -151,7 +150,7 @@ function updateUI() {
     const emEl = document.getElementById('emeralds-count');
     const boEl = document.getElementById('boosters-count');
     if (emEl) emEl.textContent = state.emeralds;
-    if (boEl) boEl.textContent = `Boosters: ${state.boosters}`;
+    if (boEl) boEl.textContent = `Boosters: ∞`;
 }
 
 function getInventoryCounts() {
@@ -319,10 +318,10 @@ function stopSecretHack() {
 
 // BOOSTER LOGIC
 function openBooster(skipSuspense = false) {
-    if (state.boosters <= 0 || state.isOpening) return;
+    if (state.isOpening) return;
 
     state.isOpening = true;
-    state.boosters--;
+    // state.boosters--; // Désormais infini
     updateUI();
     
     const btn = document.getElementById('open-booster-btn');
@@ -432,12 +431,8 @@ function startBoosterReveal(container, controls) {
             if (index === 4) {
                 setTimeout(() => {
                     state.isOpening = false;
-                    if (state.boosters > 0) {
-                        controls.innerHTML = `<button id="open-another-btn">Ouvrir un autre Pack (${state.boosters})</button>`;
-                        document.getElementById('open-another-btn').onclick = () => openBooster(true);
-                    } else {
-                        controls.innerHTML = `<p>Plus de boosters ! Allez à la boutique.</p>`;
-                    }
+                    controls.innerHTML = `<button id="open-another-btn">Ouvrir un autre Pack (∞)</button>`;
+                    document.getElementById('open-another-btn').onclick = () => openBooster(true);
                 }, 1500);
             }
         }, index * 800);
@@ -779,7 +774,7 @@ window.adminGiveAllCards = () => {
 
 window.adminResetSelf = () => {
     if (confirm("Reset TA collection ?")) {
-        state.inventory = []; state.emeralds = 1000; state.boosters = 10;
+        state.inventory = []; state.emeralds = 1000;
         saveState();
         renderInventory();
     }
@@ -820,7 +815,7 @@ window.adminGiveRandomCard = async (uid) => {
 window.adminResetUser = async (uid) => {
     if (confirm("Réinitialiser ce joueur ?")) {
         await db.collection('users').doc(uid).update({
-            inventory: [], emeralds: 1000, boosters: 10
+            inventory: [], emeralds: 1000
         });
         alert("Joueur réinitialisé !");
         renderAdminView();
@@ -835,22 +830,390 @@ window.adminBanUser = async (uid, email) => {
     }
 };
 
+// --- TRADE SYSTEM LOGIC ---
+let activeTradeListener = null;
+
+async function renderTradeView() {
+    if (state.isOpening) return;
+    if (activeTradeListener) { activeTradeListener(); activeTradeListener = null; }
+
+    document.getElementById('sort-controls').style.display = 'none';
+    const content = document.getElementById('content');
+    const user = auth.currentUser;
+    if (!user) return;
+
+    content.innerHTML = `
+        <div id="trade-view">
+            <h2 style="text-align:center; color: var(--gold-vibrant);">Système d'Échange</h2>
+            
+            <div style="background: #222; padding: 20px; border: 4px solid #444; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Initier un nouvel échange</h3>
+                <div style="display: flex; gap: 10px;">
+                    <input type="email" id="trade-target-email" placeholder="Email du joueur..." style="flex: 1; padding: 10px; background: #111; color: white; border: 2px solid #555;">
+                    <button onclick="startTradeWithEmail()" style="background: #3498db;">Envoyer Demande</button>
+                </div>
+            </div>
+
+            <div class="trade-sections">
+                <div class="trade-card-list">
+                    <h3>Demandes Reçues</h3>
+                    <div id="received-trades">Chargement...</div>
+                </div>
+                <div class="trade-card-list">
+                    <h3>Mes Demandes Envoyées</h3>
+                    <div id="sent-trades">Chargement...</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Listen for trades involving the current user
+    const ref = db.collection('trades');
+    
+    // Received trades
+    db.collection('trades')
+        .where('receiverId', '==', user.uid)
+        .where('status', 'in', ['pending', 'active'])
+        .onSnapshot(snap => {
+            const list = document.getElementById('received-trades');
+            if (!list) return;
+            if (snap.empty) { list.innerHTML = "<p>Aucune demande reçue.</p>"; return; }
+            list.innerHTML = "";
+            snap.forEach(doc => {
+                const data = doc.data();
+                const div = document.createElement('div');
+                div.className = "trade-request-item";
+                const label = data.status === 'active' ? "EN COURS" : "NOUVEAU";
+                div.innerHTML = `
+                    <span><b>${data.senderEmail}</b> (${label})</span>
+                    <div class="actions">
+                        ${data.status === 'active' ? 
+                            `<button style="background:#2ecc71;" onclick="renderActiveTrade('${doc.id}')">REJOINDRE</button>` : 
+                            `<button class="btn-accept" onclick="acceptTradeRequest('${doc.id}')">Accepter</button>`
+                        }
+                        <button class="btn-decline" onclick="cancelTrade('${doc.id}')">${data.status === 'active' ? 'Quitter' : 'Refuser'}</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        });
+
+    // Sent trades
+    db.collection('trades')
+        .where('senderId', '==', user.uid)
+        .where('status', 'in', ['pending', 'active'])
+        .onSnapshot(snap => {
+            const list = document.getElementById('sent-trades');
+            if (!list) return;
+            if (snap.empty) { list.innerHTML = "<p>Aucune demande envoyée.</p>"; return; }
+            list.innerHTML = "";
+            snap.forEach(doc => {
+                const data = doc.data();
+                const div = document.createElement('div');
+                div.className = "trade-request-item";
+                const label = data.status === 'active' ? "EN COURS" : "EN ATTENTE";
+                div.innerHTML = `
+                    <span>Vers: <b>${data.receiverEmail}</b> (${label})</span>
+                    <div class="actions">
+                        ${data.status === 'active' ? `<button style="background:#2ecc71;" onclick="renderActiveTrade('${doc.id}')">REJOINDRE</button>` : ''}
+                        <button class="btn-decline" onclick="cancelTrade('${doc.id}')">${data.status === 'active' ? 'Annuler Trade' : 'Annuler Demande'}</button>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        });
+}
+
+window.startTradeWithEmail = async () => {
+    const email = document.getElementById('trade-target-email').value.trim().toLowerCase();
+    const currentUser = auth.currentUser;
+    if (!email || email === currentUser.email) {
+        alert("Veuillez saisir un email valide différent du vôtre.");
+        return;
+    }
+
+    // Find user by email
+    const usersSnap = await db.collection('users').where('email', '==', email).get();
+    if (usersSnap.empty) {
+        alert("Joueur non trouvé ! Assurez-vous que l'email est correct.");
+        return;
+    }
+
+    const targetUserDoc = usersSnap.docs[0];
+    const targetUserId = targetUserDoc.id;
+
+    // Check if a trade already exists
+    const existing = await db.collection('trades')
+        .where('senderId', '==', currentUser.uid)
+        .where('receiverId', '==', targetUserId)
+        .where('status', '==', 'pending')
+        .get();
+
+    if (!existing.empty) {
+        alert("Une demande est déjà en cours avec ce joueur.");
+        return;
+    }
+
+    await db.collection('trades').add({
+        senderId: currentUser.uid,
+        senderEmail: currentUser.email,
+        receiverId: targetUserId,
+        receiverEmail: email,
+        senderOffer: [],
+        receiverOffer: [],
+        senderReady: false,
+        receiverReady: false,
+        status: 'pending',
+        timestamp: Date.now()
+    });
+
+    document.getElementById('trade-target-email').value = "";
+    alert("Demande d'échange envoyée !");
+};
+
+window.cancelTrade = async (tradeId) => {
+    if (confirm("Voulez-vous annuler cet échange ?")) {
+        await db.collection('trades').doc(tradeId).delete();
+    }
+};
+
+window.acceptTradeRequest = async (tradeId) => {
+    await db.collection('trades').doc(tradeId).update({ status: 'active' });
+    renderActiveTrade(tradeId);
+};
+
+async function renderActiveTrade(tradeId) {
+    if (activeTradeListener) activeTradeListener();
+    
+    const content = document.getElementById('content');
+    const userId = auth.currentUser.uid;
+
+    activeTradeListener = db.collection('trades').doc(tradeId).onSnapshot(async doc => {
+        if (!doc.exists) {
+            alert("L'échange a été annulé.");
+            renderTradeView();
+            return;
+        }
+
+        const data = doc.data();
+        if (data.status === 'completed') {
+            alert("Échange terminé avec succès !");
+            await loadCloudState(userId); // Refresh local inventory
+            renderTradeView();
+            return;
+        }
+
+        const isSender = data.senderId === userId;
+        const myRole = isSender ? 'sender' : 'receiver';
+        const otherRole = isSender ? 'receiver' : 'sender';
+        
+        const myOffer = data[`${myRole}Offer`];
+        const otherOffer = data[`${otherRole}Offer`];
+        const myReady = data[`${myRole}Ready`];
+        const otherReady = data[`${otherRole}Ready`];
+
+        content.innerHTML = `
+            <div id="trade-view">
+                <div style="text-align:center; margin-bottom: 20px;">
+                    <button onclick="renderTradeView()" style="background: #7f8c8d;">⬅ Quitter l'échange</button>
+                </div>
+                
+                <div class="trade-screen">
+                    <div class="trade-box ${myReady ? 'ready' : ''}">
+                        <h3>MOI (${auth.currentUser.email})</h3>
+                        <div class="trade-slots" id="my-trade-slots"></div>
+                        <div class="ready-status ${myReady ? 'status-ready' : 'status-not-ready'}">
+                            ${myReady ? 'PRÊT ✓' : 'EN ATTENTE...'}
+                        </div>
+                    </div>
+
+                    <div class="trade-vs">VS</div>
+
+                    <div class="trade-box ${otherReady ? 'ready' : ''}">
+                        <h3>${isSender ? data.receiverEmail : data.senderEmail}</h3>
+                        <div class="trade-slots" id="other-trade-slots"></div>
+                        <div class="ready-status ${otherReady ? 'status-ready' : 'status-not-ready'}">
+                            ${otherReady ? 'PRÊT ✓' : 'EN ATTENTE...'}
+                        </div>
+                    </div>
+
+                    <div class="trade-footer">
+                        <button onclick="toggleTradeReady('${tradeId}', ${myReady})" 
+                                style="background: ${myReady ? '#e67e22' : '#27ae60'}; padding: 15px 40px; font-size: 1.2rem;">
+                            ${myReady ? 'ANNULER PRÊT' : 'JE SUIS PRÊT !'}
+                        </button>
+                    </div>
+
+                    <div class="trade-picker">
+                        <h3>Ajouter des cartes à l'échange</h3>
+                        <div class="inventory-grid-scroll" id="trade-inventory-picker"></div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Fill slots
+        const mySlots = document.getElementById('my-trade-slots');
+        const otherSlots = document.getElementById('other-trade-slots');
+
+        myOffer.forEach(cardId => {
+            const card = cards.find(c => c.id === cardId);
+            const el = document.createElement('div');
+            el.className = "trade-slot-item";
+            el.innerHTML = renderOnlyIcon(card);
+            if (!myReady) {
+                el.style.cursor = "pointer";
+                el.onclick = () => removeCardFromTrade(tradeId, cardId, myRole, myOffer);
+            }
+            mySlots.appendChild(el);
+        });
+
+        otherOffer.forEach(cardId => {
+            const card = cards.find(c => c.id === cardId);
+            const el = document.createElement('div');
+            el.className = "trade-slot-item";
+            el.innerHTML = renderOnlyIcon(card);
+            otherSlots.appendChild(el);
+        });
+
+        // Fill picker
+        updateTradePicker(tradeId, myOffer, myReady);
+
+        // Check if both ready -> EXECUTE
+        if (myReady && otherReady) {
+            executeTrade(tradeId, data);
+        }
+    });
+}
+
+function updateTradePicker(tradeId, currentOffer, myReady) {
+    const picker = document.getElementById('trade-inventory-picker');
+    if (!picker) return;
+    
+    const counts = getInventoryCounts();
+    let uniqueOwned = [...new Set(state.inventory.map(i => i.id))]
+        .map(id => cards.find(c => c.id === id));
+    
+    uniqueOwned.sort((a, b) => getCardRarity(a) - getCardRarity(b) || a.name.localeCompare(b.name));
+
+    picker.innerHTML = uniqueOwned.map(card => {
+        const inOffer = currentOffer.filter(id => id === card.id).length;
+        const available = counts[card.id] - inOffer;
+        if (available <= 0) return '';
+        
+        return `
+            <div class="mini-item-pick rarity-${getCardRarity(card).toString().replace('.', '-')}" 
+                 onclick="${myReady ? '' : `addCardToTrade('${tradeId}', '${card.id}')`}"
+                 style="${myReady ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                ${renderOnlyIcon(card)}
+                <div class="card-quantity">x${available}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+window.addCardToTrade = async (tradeId, cardId) => {
+    const tradeRef = db.collection('trades').doc(tradeId);
+    const doc = await tradeRef.get();
+    const data = doc.data();
+    const isSender = data.senderId === auth.currentUser.uid;
+    const role = isSender ? 'sender' : 'receiver';
+    const currentOffer = data[`${role}Offer`];
+
+    if (currentOffer.length >= 6) {
+        alert("Maximum 6 cartes par échange !");
+        return;
+    }
+
+    currentOffer.push(cardId);
+    await tradeRef.update({
+        [`${role}Offer`]: currentOffer,
+        senderReady: false, // Reset ready status on change
+        receiverReady: false
+    });
+};
+
+window.removeCardFromTrade = async (tradeId, cardId, role, currentOffer) => {
+    const idx = currentOffer.indexOf(cardId);
+    if (idx > -1) {
+        currentOffer.splice(idx, 1);
+        await db.collection('trades').doc(tradeId).update({
+            [`${role}Offer`]: currentOffer,
+            senderReady: false,
+            receiverReady: false
+        });
+    }
+};
+
+window.toggleTradeReady = async (tradeId, currentReadyStatus) => {
+    const isSender = (await db.collection('trades').doc(tradeId).get()).data().senderId === auth.currentUser.uid;
+    const role = isSender ? 'sender' : 'receiver';
+    await db.collection('trades').doc(tradeId).update({
+        [`${role}Ready`]: !currentReadyStatus
+    });
+};
+
+async function executeTrade(tradeId, tradeData) {
+    const tradeRef = db.collection('trades').doc(tradeId);
+    
+    // Prevent double execution
+    const freshDoc = await tradeRef.get();
+    if (freshDoc.data().status === 'completed') return;
+
+    console.log("EXECUTION DE L'ECHANGE...");
+
+    try {
+        const batch = db.batch();
+
+        // 1. Update Sender Inventory
+        const senderRef = db.collection('users').doc(tradeData.senderId);
+        const senderSnap = await senderRef.get();
+        let senderInv = senderSnap.data().inventory;
+
+        // Remove sender cards, add receiver cards
+        tradeData.senderOffer.forEach(id => {
+            const idx = senderInv.findIndex(i => i.id === id);
+            if (idx !== -1) senderInv.splice(idx, 1);
+        });
+        tradeData.receiverOffer.forEach(id => {
+            senderInv.push({ id: id, obtainedAt: Date.now() });
+        });
+        batch.update(senderRef, { inventory: senderInv });
+
+        // 2. Update Receiver Inventory
+        const receiverRef = db.collection('users').doc(tradeData.receiverId);
+        const receiverSnap = await receiverRef.get();
+        let receiverInv = receiverSnap.data().inventory;
+
+        // Remove receiver cards, add sender cards
+        tradeData.receiverOffer.forEach(id => {
+            const idx = receiverInv.findIndex(i => i.id === id);
+            if (idx !== -1) receiverInv.splice(idx, 1);
+        });
+        tradeData.senderOffer.forEach(id => {
+            receiverInv.push({ id: id, obtainedAt: Date.now() });
+        });
+        batch.update(receiverRef, { inventory: receiverInv });
+
+        // 3. Complete Trade
+        batch.update(tradeRef, { status: 'completed' });
+
+        await batch.commit();
+    } catch (e) {
+        console.error("Erreur lors de l'exécution du trade:", e);
+        alert("Une erreur est survenue lors du transfert.");
+    }
+}
+
 function renderMarketView() {
     if (state.isOpening) return;
     document.getElementById('sort-controls').style.display = 'none';
     const content = document.getElementById('content');
     content.innerHTML = `
-        <div id="market-view">
-            <div class="shop-item"><h3>Pack de Booster</h3><p>100 Émeraudes</p><button id="buy-booster">Acheter</button></div>
-            <div class="shop-item"><h3>Banque</h3><p>+500 Émeraudes</p><button id="get-emeralds">Collecter</button></div>
+        <div id="market-view" style="display: flex; justify-content: center; align-items: center; min-height: 50vh;">
+            <h2 style="color: var(--gold-vibrant); text-transform: uppercase; letter-spacing: 2px;">Boutique bientôt disponible...</h2>
         </div>
     `;
-
-    document.getElementById('buy-booster').onclick = () => {
-        if (state.emeralds >= 100) { state.emeralds -= 100; state.boosters++; saveState(); }
-        else alert("Pas assez d'émeraudes !");
-    };
-    document.getElementById('get-emeralds').onclick = () => { state.emeralds += 500; saveState(); };
 }
 
 function setupNavigation() {
@@ -859,6 +1222,7 @@ function setupNavigation() {
         { id: 'nav-index', func: renderIndex },
         { id: 'nav-craft', func: renderCraftView },
         { id: 'nav-booster', func: renderBoosterView },
+        { id: 'nav-trade', func: renderTradeView },
         { id: 'nav-market', func: renderMarketView }
     ];
     navs.forEach(nav => {
