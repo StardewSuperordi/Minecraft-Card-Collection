@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Card Collection</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ÉCRAN DE CONNEXION OBLIGATOIRE -->
+    <div id="auth-wall" style="position: fixed; inset: 0; background: #1a1a1a; z-index: 9999; display: flex; align-items: center; justify-content: center; background-image: linear-gradient(45deg, #111 25%, transparent 25%), linear-gradient(-45deg, #111 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #111 75%), linear-gradient(-45deg, transparent 75%, #111 75%); background-size: 60px 60px;">
+        <div id="auth-container" style="width: 100%; max-width: 400px; background: #2c2c2c; padding: 40px; border: 8px solid #000; box-shadow: 10px 10px 0px rgba(0,0,0,0.5); text-align: center;">
+            <h1 style="color: #2ecc71; text-shadow: 3px 3px #000; margin-bottom: 30px; font-size: 1.5rem;">MINECRAFT CARDS</h1>
+            <div id="user-logged-out">
+                <p id="auth-error" style="display: none; background: #c0392b; color: white; padding: 10px; border: 4px solid #000; margin-bottom: 20px; font-size: 0.9rem;"></p>
+                <p style="margin-bottom: 20px; color: #aaa;">Connectez-vous pour jouer</p>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="email" id="auth-email" placeholder="Email" style="padding: 12px; background: #111; color: white; border: 4px solid #000;">
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <input type="password" id="auth-password" placeholder="Mot de passe" style="width: 100%; padding: 12px; padding-right: 45px; background: #111; color: white; border: 4px solid #000;">
+                        <span id="toggle-password" onclick="togglePasswordVisibility()" style="position: absolute; right: 15px; cursor: pointer; color: #aaa; font-size: 1.2rem; user-select: none;">👁️</span>
+                    </div>
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button onclick="login()" style="flex: 1; padding: 12px; background: #2ecc71;">CONNEXION</button>
+                        <button onclick="signUp()" style="flex: 1; padding: 12px; background: #34495e; border-color: #000;">S'INSCRIRE</button>
+                    </div>
+                    <p style="margin-top: 15px; font-size: 0.8rem; color: #aaa; cursor: pointer; text-decoration: underline;" onclick="forgotPassword()">Mot de passe oublié ?</p>
+                </div>
+            </div>
+            <div id="user-logged-in" style="display: none;">
+                <p style="margin-bottom: 20px;">Chargement de votre collection...</p>
+                <div class="booster-pack shaking" style="width: 100px; height: 140px; margin: 0 auto; pointer-events: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENU DU JEU (Caché par défaut) -->
+    <div id="game-app" style="display: none;">
+        <div id="app">
+            <div id="screen-flash" class="rare-flash"></div>
+            <div id="fullscreen-fireworks"></div>
+            <header>
+                <h1>Minecraft Collection</h1>
+                <div style="display: flex; align-items: center; gap: 20px;">
+                    <span id="user-display-email" style="color: #2ecc71; font-size: 0.8rem; font-weight: bold; text-transform: none;"></span>
+                    <button onclick="logout()" style="padding: 5px 10px; background: #c0392b; font-size: 0.7rem; border-width: 2px;">Quitter</button>
+                </div>
+                <div class="currency">
+                    <span id="emeralds-count" class="emerald-icon">0</span>
+                    <span id="boosters-count">Boosters: 0</span>
+                </div>
+            </header>
+
+            <nav>
+                <button id="nav-inventory" class="active">Mon Inventaire</button>
+                <button id="nav-index">Carnet (Index)</button>
+                <button id="nav-craft">Table de Craft</button>
+                <button id="nav-booster">Ouvrir Booster</button>
+                <button id="nav-market">Boutique</button>
+            </nav>
+
+            <div id="sort-controls" style="text-align: center; margin-bottom: 20px;">
+                <label for="sort-select">Trier par :</label>
+                <select id="sort-select">
+                    <option value="rarity">Rareté (Décroissant)</option>
+                    <option value="date">Date d'obtention (Récent)</option>
+                    <option value="name">Nom (A-Z)</option>
+                </select>
+            </div>
+
+            <main id="content">
+                <!-- Injecté via script.js -->
+            </main>
+        </div>
+    </div>
+
+    <!-- SDK Firebase App -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // --- CONFIGURATION FIREBASE OFFICIELLE ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyCJ99a-CYWFQ8mTf5FLPUjC19ZEp_Hknlk",
+            authDomain: "minecraft-card-collection.firebaseapp.com",
+            projectId: "minecraft-card-collection",
+            storageBucket: "minecraft-card-collection.firebasestorage.app",
+            messagingSenderId: "85264000420",
+            appId: "1:85264000420:web:be7f0df4ad491bcb670d31",
+            measurementId: "G-QNXQ53M719"
+        };
+        // ------------------------------------------
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+    </script>
+
+    <!-- Chargement des données d'abord -->
+    <script src="cards.js"></script>
+    <!-- Puis la logique -->
+    <script src="script.js"></script>
+</body>
+</html>
