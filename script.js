@@ -356,7 +356,7 @@ function startBoosterReveal(container, controls) {
     const results = [];
     const now = Date.now();
     
-    const isGodPack = Math.random() < 0.001;
+    const isGodPack = Math.random() < 0.0005; // 1 chance sur 2000
     if (isGodPack) {
         console.log("!!! GOD PACK !!!");
         const godPackTitle = document.createElement('h2');
@@ -383,11 +383,11 @@ function startBoosterReveal(container, controls) {
             if (i < 4) cardId = rand < 70 ? getRandomByActualRarity(1) : getRandomByActualRarity(2);
             else {
                 const r = Math.random() * 100;
-                if (r < 0.2) cardId = getRandomByActualRarity(6); // Red Gold (1/500)
-                else if (r < 1.2) cardId = getRandomByActualRarity(5); // Gold (1%)
-                else if (r < 6.2) cardId = getRandomByActualRarity(4.5); // Immersive (5%)
-                else if (r < 16.2) cardId = getRandomByActualRarity(4.2); // Epic (10%)
-                else if (r < 36.2) cardId = getRandomByActualRarity(3); // Rare (20%)
+                if (r < 0.1) cardId = getRandomByActualRarity(6); // Red Gold (Divisé : 0.1%)
+                else if (r < 0.6) cardId = getRandomByActualRarity(5); // Gold (Divisé : 0.5%)
+                else if (r < 3.1) cardId = getRandomByActualRarity(4.5); // Immersive (Divisé : 2.5%)
+                else if (r < 8.1) cardId = getRandomByActualRarity(4.2); // Epic (Divisé : 5%)
+                else if (r < 18.1) cardId = getRandomByActualRarity(3); // Rare (Divisé : 10%)
                 else cardId = getRandomByActualRarity(2);
             }
         }
@@ -673,8 +673,11 @@ async function renderAdminView() {
             <h2 style="color: #c0392b;">PANNEAU D'ADMINISTRATION</h2>
             <div style="background: #222; padding: 20px; margin-bottom: 20px;">
                 <h3>Mes Actions (Admin)</h3>
-                <button onclick="adminGiveAllCards()">Se donner TOUTES les cartes</button>
-                <button onclick="adminResetSelf()" style="background: #e67e22;">Réinitialiser MA collection</button>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button onclick="adminGiveAllCards()">Se donner TOUTES les cartes</button>
+                    <button onclick="adminResetSelf()" style="background: #e67e22;">Réinitialiser MA collection</button>
+                    <button onclick="adminClearChat()" style="background: #c0392b;">Vider le CHAT GLOBAL</button>
+                </div>
             </div>
             
             <div style="background: #222; padding: 20px;">
@@ -1262,6 +1265,7 @@ async function renderChatView() {
     const content = document.getElementById('content');
     const user = auth.currentUser;
     if (!user) return;
+    const isCurrentUserAdmin = user.email === 'hellosuperordi@gmail.com';
 
     content.innerHTML = `
         <div id="chat-view">
@@ -1270,7 +1274,9 @@ async function renderChatView() {
                 <div class="chat-messages" id="chat-messages">
                     <p style="text-align:center; color: #555;">Chargement des messages...</p>
                 </div>
+                <div id="chat-card-picker" class="chat-card-picker"></div>
                 <div class="chat-input-area">
+                    <button id="chat-card-btn" style="background: #34495e; padding: 5px 10px !important; font-size: 1.2rem !important;" onclick="toggleChatCardPicker()">🎴</button>
                     <input type="text" id="chat-input" class="chat-input" placeholder="Écrivez un message..." maxlength="200">
                     <button id="chat-send-btn" class="chat-send-btn" onclick="sendMessage()">Envoyer</button>
                 </div>
@@ -1288,17 +1294,39 @@ async function renderChatView() {
             list.innerHTML = "";
             
             const messages = [];
-            snap.forEach(doc => messages.push(doc.data()));
+            snap.forEach(doc => messages.push({ id: doc.id, ...doc.data() }));
             
             // On les remet dans l'ordre chronologique
             messages.reverse().forEach(msg => {
                 const isAdmin = msg.senderEmail === 'hellosuperordi@gmail.com';
+                const isBeta = ['stefanodiberar06@gmail.com', 'clementcecchettigibert@gmail.com'].includes(msg.senderEmail);
+                
                 const div = document.createElement('div');
-                div.className = `chat-message ${isAdmin ? 'admin-msg' : ''}`;
-                div.innerHTML = `
-                    <span class="sender">${isAdmin ? '[ADMIN] ' : ''}${msg.senderEmail}</span>
-                    <span class="text">${msg.text}</span>
+                div.className = `chat-message ${isAdmin ? 'admin-msg' : ''} ${isBeta ? 'beta-msg' : ''}`;
+                div.style.position = 'relative';
+                
+                let prefix = '';
+                if (isAdmin) prefix = '[ADMIN] ';
+                else if (isBeta) prefix = '[BETA TESTER] ';
+
+                let contentHTML = `
+                    <span class="sender">${prefix}${msg.senderEmail}</span>
+                    <span class="text">${msg.text || ''}</span>
+                    ${isCurrentUserAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="position: absolute; right: 5px; top: 5px; padding: 2px 6px; background: #c0392b; font-size: 0.6rem; border-width: 1px;">X</button>` : ''}
                 `;
+
+                // Si le message contient une carte, on l'affiche
+                if (msg.cardId) {
+                    const cardData = cards.find(c => c.id === msg.cardId);
+                    if (cardData) {
+                        const cardWrapper = document.createElement('div');
+                        cardWrapper.className = 'chat-card-flex';
+                        cardWrapper.appendChild(createCardElement(cardData, true, 0));
+                        contentHTML += cardWrapper.outerHTML;
+                    }
+                }
+
+                div.innerHTML = contentHTML;
                 list.appendChild(div);
             });
             
@@ -1306,11 +1334,84 @@ async function renderChatView() {
             list.scrollTop = list.scrollHeight;
         });
 
+    // Remplir le sélecteur de cartes
+    updateChatCardPicker();
+
     // Permettre d'envoyer avec la touche Entrée
     document.getElementById('chat-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
 }
+
+window.deleteChatMessage = async (msgId) => {
+    if (confirm("Supprimer ce message ?")) {
+        try {
+            await db.collection('messages').doc(msgId).delete();
+        } catch (e) {
+            console.error("Erreur suppression message:", e);
+        }
+    }
+};
+
+window.adminClearChat = async () => {
+    if (!confirm("⚠️ VOULEZ-VOUS VRAIMENT VIDER TOUT LE CHAT ?")) return;
+    
+    try {
+        const snap = await db.collection('messages').get();
+        const batch = db.batch();
+        snap.forEach(doc => batch.delete(doc.ref));
+        await batch.commit();
+        alert("Chat entièrement vidé !");
+        renderAdminView();
+    } catch (e) {
+        console.error("Erreur vidage chat:", e);
+        alert("Une erreur est survenue lors du vidage.");
+    }
+};
+
+function updateChatCardPicker() {
+    const picker = document.getElementById('chat-card-picker');
+    if (!picker) return;
+
+    const uniqueIds = [...new Set(state.inventory.map(i => i.id))];
+    picker.innerHTML = uniqueIds.map(id => {
+        const card = cards.find(c => c.id === id);
+        return `
+            <div class="mini-item-pick" style="width: 50px; height: 50px; cursor: pointer;" onclick="sendCardToChat('${card.id}')">
+                ${renderOnlyIcon(card)}
+            </div>
+        `;
+    }).join('');
+}
+
+window.toggleChatCardPicker = () => {
+    const picker = document.getElementById('chat-card-picker');
+    if (picker.style.display === 'grid') {
+        picker.style.display = 'none';
+    } else {
+        picker.style.display = 'grid';
+        updateChatCardPicker();
+    }
+};
+
+window.sendCardToChat = async (cardId) => {
+    const user = auth.currentUser;
+    if (!user) return;
+    
+    document.getElementById('chat-card-picker').style.display = 'none';
+    
+    try {
+        await db.collection('messages').add({
+            senderId: user.uid,
+            senderEmail: user.email,
+            cardId: cardId,
+            text: "regarder ce que jai !",
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    } catch (e) {
+        console.error("Erreur d'envoi de carte:", e);
+    }
+};
 
 async function sendMessage() {
     const input = document.getElementById('chat-input');
