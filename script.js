@@ -40,6 +40,9 @@ auth.onAuthStateChanged(async (user) => {
         authWall.style.display = 'none';
         gameApp.style.display = 'block';
 
+        // START NOTIFICATION LISTENERS
+        startGlobalTradeListener(user);
+
         // VERIFICATION ADMIN
         if (user.email === 'hellosuperordi@gmail.com') {
             const nav = document.querySelector('nav');
@@ -50,6 +53,20 @@ auth.onAuthStateChanged(async (user) => {
                 adminBtn.style.background = '#c0392b';
                 adminBtn.onclick = renderAdminView;
                 nav.appendChild(adminBtn);
+            }
+        }
+
+        // VERIFICATION BETA TESTER
+        const betaEmails = ['stefanodiberar06@gmail.com', 'clementcecchettigibert@gmail.com'];
+        if (betaEmails.includes(user.email)) {
+            const nav = document.querySelector('nav');
+            if (!document.getElementById('nav-beta')) {
+                const betaBtn = document.createElement('button');
+                betaBtn.id = 'nav-beta';
+                betaBtn.textContent = 'BÊTA';
+                betaBtn.style.background = '#3498db';
+                betaBtn.onclick = renderBetaView;
+                nav.appendChild(betaBtn);
             }
         }
     } else {
@@ -134,16 +151,52 @@ window.logout = () => {
 };
 // ----------------------
 
+// --- ADMIN SIMULATION SYSTEM ---
+let simulatedUser = null;
+
+window.adminSimulateUser = async (uid, email) => {
+    if (!confirm(`Voulez-vous simuler le compte de ${email} ?\nToutes vos actions (ouverture, craft, etc.) affecteront son inventaire.`)) return;
+    
+    simulatedUser = { uid, email };
+    await loadCloudState(uid);
+    
+    // Mise à jour de l'affichage
+    const display = document.getElementById('user-display-email');
+    display.innerHTML = `<span style="color: #e67e22; font-weight: bold;">[SIMULATION] ${email}</span> 
+                        <button onclick="stopSimulation()" style="padding: 2px 8px; background: #c0392b; font-size: 0.6rem; margin-left: 10px; border-width: 2px;">QUITTER</button>`;
+    
+    renderInventory();
+    alert(`Vous contrôlez maintenant le compte de ${email}`);
+};
+
+window.stopSimulation = async () => {
+    const user = auth.currentUser;
+    simulatedUser = null;
+    
+    document.getElementById('user-display-email').textContent = user.email;
+    await loadCloudState(user.uid);
+    renderInventory();
+    alert("Retour sur votre compte administrateur.");
+};
+
 function saveState() {
     localStorage.setItem('minecraftCardCollectionState_v5', JSON.stringify(state));
-    const user = auth.currentUser;
-    if (user) saveCloudState(user.uid);
+    const uid = simulatedUser ? simulatedUser.uid : (auth.currentUser ? auth.currentUser.uid : null);
+    if (uid) saveCloudState(uid);
     updateUI();
 }
 
 function getCardRarity(card) {
     if (card.rarity_override !== undefined) return card.rarity_override;
     return raritySettings[card.type] || 1;
+}
+
+function getArmorPieceWeight(name) {
+    const pieceOrder = ['Helmet', 'Chestplate', 'Leggings', 'Boots', 'Horse Armor', 'Wolf Armor'];
+    for (let i = 0; i < pieceOrder.length; i++) {
+        if (name.includes(pieceOrder[i])) return i;
+    }
+    return 99;
 }
 
 function updateUI() {
@@ -186,7 +239,29 @@ function renderInventory() {
     if (sortType === 'rarity') {
         displayList.sort((a, b) => {
             if (b.actual_rarity !== a.actual_rarity) return b.actual_rarity - a.actual_rarity;
-            if (a.category !== b.category) return a.category === 'Blocks' ? -1 : 1;
+            if (a.category !== b.category) {
+                const order = ['Blocks', 'Outils', 'Armures', 'Items', 'Musique', 'Secret'];
+                return order.indexOf(a.category) - order.indexOf(b.category);
+            }
+            if (a.category === 'Armures') {
+                const matA = a.name.split(' ')[0];
+                const matB = b.name.split(' ')[0];
+                if (matA !== matB) return matA.localeCompare(matB);
+                return getArmorPieceWeight(a.name) - getArmorPieceWeight(b.name);
+            }
+            return a.name.localeCompare(b.name);
+        });
+    } else if (sortType === 'category') {
+        displayList.sort((a, b) => {
+            const order = ['Blocks', 'Outils', 'Armures', 'Items', 'Musique', 'Secret'];
+            if (a.category !== b.category) return order.indexOf(a.category) - order.indexOf(b.category);
+            if (b.actual_rarity !== a.actual_rarity) return b.actual_rarity - a.actual_rarity;
+            if (a.category === 'Armures') {
+                const matA = a.name.split(' ')[0];
+                const matB = b.name.split(' ')[0];
+                if (matA !== matB) return matA.localeCompare(matB);
+                return getArmorPieceWeight(a.name) - getArmorPieceWeight(b.name);
+            }
             return a.name.localeCompare(b.name);
         });
     } else if (sortType === 'date') {
@@ -220,7 +295,7 @@ function renderIndex() {
     statsContainer.innerHTML = `Complétion : <span>${ownedUnique} / ${totalUnique}</span> cards`;
     content.appendChild(statsContainer);
 
-    const categories = ['Blocks', 'Outils', 'Items', 'Musique', 'Secret'];
+    const categories = ['Blocks', 'Outils', 'Armures', 'Items', 'Musique', 'Secret'];
 
     categories.forEach(cat => {
         const catTitle = document.createElement('h2');
@@ -233,7 +308,23 @@ function renderIndex() {
         content.appendChild(grid);
 
         const catCards = cards.filter(c => c.category === cat);
-        const sortedCards = [...catCards].sort((a, b) => getCardRarity(b) - getCardRarity(a) || a.name.localeCompare(b.name));
+        let sortedCards;
+
+        if (cat === 'Armures') {
+            sortedCards = [...catCards].sort((a, b) => {
+                const rarityA = getCardRarity(a);
+                const rarityB = getCardRarity(b);
+                if (rarityA !== rarityB) return rarityB - rarityA;
+
+                const matA = a.name.split(' ')[0];
+                const matB = b.name.split(' ')[0];
+                if (matA !== matB) return matA.localeCompare(matB);
+
+                return getArmorPieceWeight(a.name) - getArmorPieceWeight(b.name);
+            });
+        } else {
+            sortedCards = [...catCards].sort((a, b) => getCardRarity(b) - getCardRarity(a) || a.name.localeCompare(b.name));
+        }
 
         sortedCards.forEach(card => {
             const count = counts[card.id] || 0;
@@ -258,8 +349,12 @@ function createCardElement(card, isOwned, count = 0) {
         if (card.type === 'secret') {
             if (card.id === '199') {
                 cardEl.classList.add('card-secret-gold');
+            } else if (card.id === '244') {
+                cardEl.classList.add('card-armor-soul');
+            } else if (card.id === '245') {
+                cardEl.classList.add('card-pigeon');
             } else {
-                cardEl.classList.add('effect-secret'); // L'ancien effet pour l'autre secrète
+                cardEl.classList.add('effect-secret'); 
             }
         }
     }
@@ -287,12 +382,29 @@ function createCardElement(card, isOwned, count = 0) {
     innerHTML += `${isOwned && count > 1 ? `<div class="card-quantity">x${count}</div>` : ''}`;
     cardEl.innerHTML = innerHTML;
     
-    if (card.type === 'secret' && card.id !== '199') { // Ne pas activer l'effet glitch pour le lingot d'or
+    if (card.type === 'secret' && card.id !== '199' && card.id !== '244' && card.id !== '245') { // Ne pas activer l'effet glitch pour le lingot d'or, l'âme de l'armurier et le pigeon
         cardEl.addEventListener('mouseenter', startSecretHack);
         cardEl.addEventListener('mouseleave', stopSecretHack);
     }
 
+    if (card.id === '245') {
+        cardEl.addEventListener('mouseenter', startSiteShake);
+        cardEl.addEventListener('mouseleave', stopSiteShake);
+    }
+
     return cardEl;
+}
+
+function startSiteShake() {
+    document.body.classList.add('site-shake');
+    const app = document.getElementById('game-app');
+    if (app) app.classList.add('site-shake');
+}
+
+function stopSiteShake() {
+    document.body.classList.remove('site-shake');
+    const app = document.getElementById('game-app');
+    if (app) app.classList.remove('site-shake');
 }
 
 function startSecretHack() {
@@ -663,6 +775,55 @@ window.performCraft = () => {
     }, 800); // Durée de l'animation de fusion
 };
 
+async function renderBetaView() {
+    document.getElementById('sort-controls').style.display = 'none';
+    const content = document.getElementById('content');
+    
+    // Calcul de quelques stats globales pour les testeurs
+    const usersSnap = await db.collection('users').get();
+    let totalCardsOwned = 0;
+    usersSnap.forEach(doc => {
+        totalCardsOwned += (doc.data().inventory || []).length;
+    });
+
+    content.innerHTML = `
+        <div id="beta-view" style="padding: 20px; background: #1a1a1a; border: 4px solid #3498db; border-radius: 8px;">
+            <h2 style="color: #3498db; text-align: center;">PANNEAU BÊTA-TESTEUR</h2>
+            <p style="text-align: center; color: #aaa;">Merci de nous aider à améliorer le jeu !</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
+                <div style="background: #222; padding: 20px; border: 2px solid #444;">
+                    <h3 style="color: #2ecc71;">Statistiques Globales</h3>
+                    <p>Joueurs inscrits : <strong>${usersSnap.size}</strong></p>
+                    <p>Total des cartes en circulation : <strong>${totalCardsOwned}</strong></p>
+                </div>
+                
+                <div style="background: #222; padding: 20px; border: 2px solid #444;">
+                    <h3 style="color: #e67e22;">Notes de Version</h3>
+                    <ul style="font-size: 0.9rem; color: #ccc; padding-left: 20px;">
+                        <li>Ajout de la catégorie "Armures" complète</li>
+                        <li>Nouveaux minerais : Paladium et Endium</li>
+                        <li>Correction du tri dans l'index</li>
+                        <li>Optimisation du système de Craft</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div style="background: #222; padding: 20px; border: 2px solid #444; margin-top: 20px;">
+                <h3 style="color: #3498db;">Rapport de Bug / Suggestions</h3>
+                <p style="font-size: 0.9rem; color: #aaa;">Pour toute suggestion ou bug trouvé, merci de contacter l'administrateur sur Discord ou par Email.</p>
+                <div style="text-align: center; margin-top: 15px;">
+                    <button style="background: #34495e;" onclick="alert('Fonctionnalité de rapport direct bientôt disponible !')">Envoyer un Feedback</button>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; text-align: center; font-style: italic; color: #555;">
+                Accès exclusif : ${auth.currentUser.email}
+            </div>
+        </div>
+    `;
+}
+
 async function renderAdminView() {
     if (auth.currentUser?.email !== 'hellosuperordi@gmail.com') return;
     
@@ -723,6 +884,7 @@ async function renderAdminView() {
                     ${userEmail} ${isBanned ? '[BANNI]' : ''} (${userData.emeralds || 0} 💎)
                 </span>
                 <div style="display: flex; gap: 5px; align-items: center;">
+                    <button onclick="adminSimulateUser('${userId}', '${userEmail}')" style="background: #e67e22; padding: 5px 10px;">SIMULER</button>
                     <input type="number" id="admin-emerald-amount-${userId}" value="0" style="width: 70px; padding: 5px; background: #333; color: white; border: 1px solid #555;">
                     <button onclick="adminGiveEmeralds('${userId}')" style="background: #27ae60;">+ 💎</button>
                     ${isBanned ? 
@@ -835,9 +997,47 @@ window.adminBanUser = async (uid, email) => {
 
 // --- TRADE SYSTEM LOGIC ---
 let activeTradeListener = null;
+let unreadTrades = 0;
+let isTradeActive = false;
+let globalTradeListenerInstance = null;
+
+function startGlobalTradeListener(user) {
+    if (globalTradeListenerInstance) globalTradeListenerInstance();
+    
+    globalTradeListenerInstance = db.collection('trades')
+        .where('receiverId', '==', user.uid)
+        .where('status', '==', 'pending')
+        .onSnapshot(snap => {
+            if (!isTradeActive) {
+                unreadTrades = snap.size;
+                updateTradeBadge();
+            }
+        });
+}
+
+function updateTradeBadge() {
+    const btn = document.getElementById('nav-trade');
+    if (!btn) return;
+    
+    let badge = btn.querySelector('.trade-badge');
+    if (unreadTrades > 0) {
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.className = 'chat-badge trade-badge';
+            btn.appendChild(badge);
+        }
+        badge.textContent = `+${unreadTrades}`;
+    } else if (badge) {
+        badge.remove();
+    }
+}
 
 async function renderTradeView() {
     if (state.isOpening) return;
+    isTradeActive = true;
+    unreadTrades = 0;
+    updateTradeBadge();
+    
     if (activeTradeListener) { activeTradeListener(); activeTradeListener = null; }
 
     document.getElementById('sort-controls').style.display = 'none';
@@ -1453,7 +1653,9 @@ function setupNavigation() {
         { id: 'nav-booster', func: renderBoosterView },
         { id: 'nav-trade', func: renderTradeView },
         { id: 'nav-chat', func: renderChatView },
-        { id: 'nav-market', func: renderMarketView }
+        { id: 'nav-market', func: renderMarketView },
+        { id: 'nav-admin', func: renderAdminView },
+        { id: 'nav-beta', func: renderBetaView }
     ];
     navs.forEach(nav => {
         const btn = document.getElementById(nav.id);
@@ -1463,6 +1665,7 @@ function setupNavigation() {
                 
                 // Nettoyage des listeners quand on change d'onglet
                 isChatActive = (nav.id === 'nav-chat');
+                isTradeActive = (nav.id === 'nav-trade');
                 if (activeChatListener) { activeChatListener(); activeChatListener = null; }
                 if (activeTradeListener) { activeTradeListener(); activeTradeListener = null; }
 

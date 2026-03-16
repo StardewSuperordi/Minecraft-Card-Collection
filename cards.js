@@ -1759,6 +1759,422 @@ window.CARD_CONFIG = {
       "item_asset": "gold_ingot_rotate.gif",
       "rarity_override": 7,
       "obtainable": false
+    },
+    {
+      "id": "200",
+      "name": "Leather Helmet",
+      "type": "common",
+      "is_item": true,
+      "item_asset": "leather_helmet.png",
+      "category": "Armures",
+      "rarity_override": 1
+    },
+    {
+      "id": "201",
+      "name": "Leather Chestplate",
+      "type": "common",
+      "is_item": true,
+      "item_asset": "leather_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 1
+    },
+    {
+      "id": "202",
+      "name": "Leather Leggings",
+      "type": "common",
+      "is_item": true,
+      "item_asset": "leather_leggings.png",
+      "category": "Armures",
+      "rarity_override": 1
+    },
+    {
+      "id": "203",
+      "name": "Leather Boots",
+      "type": "common",
+      "is_item": true,
+      "item_asset": "leather_boots.png",
+      "category": "Armures",
+      "rarity_override": 1
+    },
+    {
+      "id": "204",
+      "name": "Chainmail Helmet",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "chainmail_helmet.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "205",
+      "name": "Chainmail Chestplate",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "chainmail_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "206",
+      "name": "Chainmail Leggings",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "chainmail_leggings.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "207",
+      "name": "Chainmail Boots",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "chainmail_boots.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "208",
+      "name": "Iron Helmet",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "iron_helmet.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "209",
+      "name": "Iron Chestplate",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "iron_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "210",
+      "name": "Iron Leggings",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "iron_leggings.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "211",
+      "name": "Iron Boots",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "iron_boots.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "212",
+      "name": "Copper Helmet",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "copper_helmet.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "213",
+      "name": "Copper Chestplate",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "copper_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "214",
+      "name": "Copper Leggings",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "copper_leggings.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "215",
+      "name": "Copper Boots",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "copper_boots.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "216",
+      "name": "Golden Helmet",
+      "type": "rare",
+      "is_item": true,
+      "item_asset": "golden_helmet.png",
+      "category": "Armures",
+      "rarity_override": 3
+    },
+    {
+      "id": "217",
+      "name": "Golden Chestplate",
+      "type": "rare",
+      "is_item": true,
+      "item_asset": "golden_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 3
+    },
+    {
+      "id": "218",
+      "name": "Golden Leggings",
+      "type": "rare",
+      "is_item": true,
+      "item_asset": "golden_leggings.png",
+      "category": "Armures",
+      "rarity_override": 3
+    },
+    {
+      "id": "219",
+      "name": "Golden Boots",
+      "type": "rare",
+      "is_item": true,
+      "item_asset": "golden_boots.png",
+      "category": "Armures",
+      "rarity_override": 3
+    },
+    {
+      "id": "220",
+      "name": "Diamond Helmet",
+      "type": "epic",
+      "is_item": true,
+      "item_asset": "diamond_helmet.png",
+      "category": "Armures",
+      "rarity_override": 4
+    },
+    {
+      "id": "221",
+      "name": "Diamond Chestplate",
+      "type": "epic",
+      "is_item": true,
+      "item_asset": "diamond_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 4
+    },
+    {
+      "id": "222",
+      "name": "Diamond Leggings",
+      "type": "epic",
+      "is_item": true,
+      "item_asset": "diamond_leggings.png",
+      "category": "Armures",
+      "rarity_override": 4
+    },
+    {
+      "id": "223",
+      "name": "Diamond Boots",
+      "type": "epic",
+      "is_item": true,
+      "item_asset": "diamond_boots.png",
+      "category": "Armures",
+      "rarity_override": 4
+    },
+    {
+      "id": "224",
+      "name": "Netherite Helmet",
+      "type": "immersive",
+      "is_item": true,
+      "item_asset": "netherite_helmet.png",
+      "category": "Armures",
+      "rarity_override": 4.5
+    },
+    {
+      "id": "225",
+      "name": "Netherite Chestplate",
+      "type": "immersive",
+      "is_item": true,
+      "item_asset": "netherite_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 4.5
+    },
+    {
+      "id": "226",
+      "name": "Netherite Leggings",
+      "type": "immersive",
+      "is_item": true,
+      "item_asset": "netherite_leggings.png",
+      "category": "Armures",
+      "rarity_override": 4.5
+    },
+    {
+      "id": "227",
+      "name": "Netherite Boots",
+      "type": "immersive",
+      "is_item": true,
+      "item_asset": "netherite_boots.png",
+      "category": "Armures",
+      "rarity_override": 4.5
+    },
+    {
+      "id": "228",
+      "name": "Turtle Helmet",
+      "type": "rare",
+      "is_item": true,
+      "item_asset": "turtle_helmet.png",
+      "category": "Armures",
+      "rarity_override": 3
+    },
+    {
+      "id": "229",
+      "name": "Wolf Armor",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "wolf_armor.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "230",
+      "name": "Leather Horse Armor",
+      "type": "common",
+      "is_item": true,
+      "item_asset": "leather_horse_armor.png",
+      "category": "Armures",
+      "rarity_override": 1
+    },
+    {
+      "id": "231",
+      "name": "Iron Horse Armor",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "iron_horse_armor.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "232",
+      "name": "Golden Horse Armor",
+      "type": "rare",
+      "is_item": true,
+      "item_asset": "golden_horse_armor.png",
+      "category": "Armures",
+      "rarity_override": 3
+    },
+    {
+      "id": "233",
+      "name": "Diamond Horse Armor",
+      "type": "epic",
+      "is_item": true,
+      "item_asset": "diamond_horse_armor.png",
+      "category": "Armures",
+      "rarity_override": 4
+    },
+    {
+      "id": "234",
+      "name": "Netherite Horse Armor",
+      "type": "immersive",
+      "is_item": true,
+      "item_asset": "netherite_horse_armor.png",
+      "category": "Armures",
+      "rarity_override": 4.5
+    },
+    {
+      "id": "235",
+      "name": "Copper Horse Armor",
+      "type": "uncommon",
+      "is_item": true,
+      "item_asset": "copper_horse_armor.png",
+      "category": "Armures",
+      "rarity_override": 2
+    },
+    {
+      "id": "236",
+      "name": "Paladium Helmet",
+      "type": "gold",
+      "is_item": true,
+      "item_asset": "paladium_helmet.png",
+      "category": "Armures",
+      "rarity_override": 5
+    },
+    {
+      "id": "237",
+      "name": "Paladium Chestplate",
+      "type": "gold",
+      "is_item": true,
+      "item_asset": "paladium_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 5
+    },
+    {
+      "id": "238",
+      "name": "Paladium Leggings",
+      "type": "gold",
+      "is_item": true,
+      "item_asset": "paladium_leggings.png",
+      "category": "Armures",
+      "rarity_override": 5
+    },
+    {
+      "id": "239",
+      "name": "Paladium Boots",
+      "type": "gold",
+      "is_item": true,
+      "item_asset": "paladium_boots.png",
+      "category": "Armures",
+      "rarity_override": 5
+    },
+    {
+      "id": "240",
+      "name": "Endium Helmet",
+      "type": "red_gold",
+      "is_item": true,
+      "item_asset": "endium_helmet.png",
+      "category": "Armures",
+      "rarity_override": 6
+    },
+    {
+      "id": "241",
+      "name": "Endium Chestplate",
+      "type": "red_gold",
+      "is_item": true,
+      "item_asset": "endium_chestplate.png",
+      "category": "Armures",
+      "rarity_override": 6
+    },
+    {
+      "id": "242",
+      "name": "Endium Leggings",
+      "type": "red_gold",
+      "is_item": true,
+      "item_asset": "endium_leggings.png",
+      "category": "Armures",
+      "rarity_override": 6
+    },
+    {
+      "id": "243",
+      "name": "Endium Boots",
+      "type": "red_gold",
+      "is_item": true,
+      "item_asset": "endium_boots.png",
+      "category": "Armures",
+      "rarity_override": 6
+    },
+    {
+      "id": "244",
+      "name": "The Armorer's Soul",
+      "type": "secret",
+      "is_item": true,
+      "item_asset": "netherite_chestplate.png",
+      "category": "Secret",
+      "rarity_override": 7,
+      "obtainable": false
+    },
+    {
+      "id": "245",
+      "name": "The Pigeon",
+      "type": "secret",
+      "is_item": true,
+      "item_asset": "pigeon.gif",
+      "category": "Secret",
+      "rarity_override": 7,
+      "obtainable": false
     }
   ]
 };
