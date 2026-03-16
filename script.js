@@ -1205,6 +1205,134 @@ async function executeTrade(tradeId, tradeData) {
     }
 }
 
+// --- CHAT SYSTEM LOGIC ---
+let activeChatListener = null;
+let unreadMessages = 0;
+let isChatActive = false;
+let lastMessageTimestamp = 0;
+
+// Écouteur global pour les nouveaux messages (pour les notifications)
+function startGlobalChatListener() {
+    db.collection('messages')
+        .orderBy('timestamp', 'desc')
+        .limit(1)
+        .onSnapshot(snap => {
+            if (snap.empty) return;
+            const msg = snap.docs[0].data();
+            const ts = msg.timestamp ? msg.timestamp.toMillis() : Date.now();
+            
+            // Si c'est un nouveau message et qu'on n'est pas sur le chat
+            if (ts > lastMessageTimestamp) {
+                if (!isChatActive) {
+                    unreadMessages++;
+                    updateChatBadge();
+                }
+                lastMessageTimestamp = ts;
+            }
+        });
+}
+
+function updateChatBadge() {
+    const btn = document.getElementById('nav-chat');
+    if (!btn) return;
+    
+    let badge = btn.querySelector('.chat-badge');
+    if (unreadMessages > 0) {
+        if (!badge) {
+            badge = document.createElement('div');
+            badge.className = 'chat-badge';
+            btn.appendChild(badge);
+        }
+        badge.textContent = `+${unreadMessages}`;
+    } else if (badge) {
+        badge.remove();
+    }
+}
+
+async function renderChatView() {
+    if (state.isOpening) return;
+    isChatActive = true;
+    unreadMessages = 0;
+    updateChatBadge();
+
+    if (activeChatListener) { activeChatListener(); activeChatListener = null; }
+    if (activeTradeListener) { activeTradeListener(); activeTradeListener = null; }
+
+    document.getElementById('sort-controls').style.display = 'none';
+    const content = document.getElementById('content');
+    const user = auth.currentUser;
+    if (!user) return;
+
+    content.innerHTML = `
+        <div id="chat-view">
+            <h2 style="text-align:center; color: var(--emerald-color);">Chat Global</h2>
+            <div class="chat-container">
+                <div class="chat-messages" id="chat-messages">
+                    <p style="text-align:center; color: #555;">Chargement des messages...</p>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="chat-input" class="chat-input" placeholder="Écrivez un message..." maxlength="200">
+                    <button id="chat-send-btn" class="chat-send-btn" onclick="sendMessage()">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Ecouter les messages en temps réel (limité aux 50 derniers)
+    activeChatListener = db.collection('messages')
+        .orderBy('timestamp', 'desc')
+        .limit(50)
+        .onSnapshot(snap => {
+            const list = document.getElementById('chat-messages');
+            if (!list) return;
+            list.innerHTML = "";
+            
+            const messages = [];
+            snap.forEach(doc => messages.push(doc.data()));
+            
+            // On les remet dans l'ordre chronologique
+            messages.reverse().forEach(msg => {
+                const isAdmin = msg.senderEmail === 'hellosuperordi@gmail.com';
+                const div = document.createElement('div');
+                div.className = `chat-message ${isAdmin ? 'admin-msg' : ''}`;
+                div.innerHTML = `
+                    <span class="sender">${isAdmin ? '[ADMIN] ' : ''}${msg.senderEmail}</span>
+                    <span class="text">${msg.text}</span>
+                `;
+                list.appendChild(div);
+            });
+            
+            // Scroll auto en bas
+            list.scrollTop = list.scrollHeight;
+        });
+
+    // Permettre d'envoyer avec la touche Entrée
+    document.getElementById('chat-input').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+}
+
+async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    const user = auth.currentUser;
+
+    if (!text || !user) return;
+
+    input.value = "";
+    try {
+        await db.collection('messages').add({
+            senderId: user.uid,
+            senderEmail: user.email,
+            text: text,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+    } catch (e) {
+        console.error("Erreur d'envoi du message:", e);
+        alert("Erreur lors de l'envoi du message.");
+    }
+}
+
 function renderMarketView() {
     if (state.isOpening) return;
     document.getElementById('sort-controls').style.display = 'none';
@@ -1223,6 +1351,7 @@ function setupNavigation() {
         { id: 'nav-craft', func: renderCraftView },
         { id: 'nav-booster', func: renderBoosterView },
         { id: 'nav-trade', func: renderTradeView },
+        { id: 'nav-chat', func: renderChatView },
         { id: 'nav-market', func: renderMarketView }
     ];
     navs.forEach(nav => {
@@ -1230,6 +1359,12 @@ function setupNavigation() {
         if (btn) {
             btn.onclick = (e) => {
                 if (state.isOpening) return;
+                
+                // Nettoyage des listeners quand on change d'onglet
+                isChatActive = (nav.id === 'nav-chat');
+                if (activeChatListener) { activeChatListener(); activeChatListener = null; }
+                if (activeTradeListener) { activeTradeListener(); activeTradeListener = null; }
+
                 document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
                 e.currentTarget.classList.add('active');
                 nav.func();
@@ -1243,6 +1378,7 @@ function init() {
     setupNavigation();
     renderInventory();
     updateUI();
+    startGlobalChatListener();
 }
 
 init();
