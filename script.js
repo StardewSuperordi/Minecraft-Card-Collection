@@ -2,7 +2,8 @@
 let state = {
     emeralds: 1000,
     inventory: [], 
-    isOpening: false
+    isOpening: false,
+    prestige: 0
 };
 
 const config = window.CARD_CONFIG || { rarity_settings: {}, cards: [] };
@@ -204,6 +205,12 @@ function updateUI() {
     const boEl = document.getElementById('boosters-count');
     if (emEl) emEl.textContent = state.emeralds;
     if (boEl) boEl.textContent = `Boosters: ∞`;
+    
+    if (state.prestige > 0) {
+        document.body.classList.add('prestige-mode');
+    } else {
+        document.body.classList.remove('prestige-mode');
+    }
 }
 
 function getInventoryCounts() {
@@ -211,6 +218,19 @@ function getInventoryCounts() {
     state.inventory.forEach(item => {
         counts[item.id] = (counts[item.id] || 0) + 1;
     });
+
+    // --- LOGIQUE CARTE ULTIMATE (ID 999) ---
+    // Vérifier si l'utilisateur possède toutes les cartes normales (hors 999)
+    const allNormalCardIds = cards.filter(c => c.id !== '999').map(c => c.id);
+    const ownedIds = Object.keys(counts);
+    const hasAll = allNormalCardIds.every(id => ownedIds.includes(id));
+
+    if (hasAll) {
+        counts['999'] = 1;
+    } else {
+        delete counts['999'];
+    }
+
     return counts;
 }
 
@@ -223,13 +243,27 @@ function renderInventory() {
 
     const counts = getInventoryCounts();
     let displayList = [];
-    const uniqueIds = [...new Set(state.inventory.map(i => i.id))];
+    
+    // On utilise les clés de counts pour inclure la carte 999 si elle y est
+    const uniqueIds = Object.keys(counts);
     
     uniqueIds.forEach(id => {
-        const cardData = cards.find(c => c.id === id);
+        let cardData = cards.find(c => c.id === id);
+        
+        // Si c'est la carte Ultimate et qu'elle n'est pas dans cards.json, on la définit ici
+        if (id === '999' && !cardData) {
+            cardData = {
+                id: '999',
+                name: "THE MASTER COLLECTION",
+                type: 'ultimate',
+                category: 'Secret',
+                description: "La preuve ultime de votre détermination."
+            };
+        }
+
         if (cardData) {
             const items = state.inventory.filter(i => i.id === id);
-            const lastObtained = items.length > 0 ? Math.max(...items.map(i => i.obtainedAt)) : 0;
+            const lastObtained = items.length > 0 ? Math.max(...items.map(i => i.obtainedAt)) : Date.now();
             const rarity = getCardRarity(cardData);
             displayList.push({ ...cardData, count: counts[id], lastObtained, actual_rarity: rarity });
         }
@@ -287,8 +321,8 @@ function renderIndex() {
     content.innerHTML = '';
 
     const counts = getInventoryCounts();
-    const ownedUnique = Object.keys(counts).length;
-    const totalUnique = cards.length;
+    const ownedUnique = Object.keys(counts).filter(id => id !== '999').length;
+    const totalUnique = cards.filter(c => c.id !== '999').length;
 
     const statsContainer = document.createElement('div');
     statsContainer.className = 'collection-stats';
@@ -307,7 +341,7 @@ function renderIndex() {
         grid.className = 'card-grid';
         content.appendChild(grid);
 
-        const catCards = cards.filter(c => c.category === cat);
+        const catCards = cards.filter(c => c.category === cat && c.id !== '999');
         let sortedCards;
 
         if (cat === 'Armures') {
@@ -337,7 +371,12 @@ function renderIndex() {
 }
 
 function createCardElement(card, isOwned, count = 0) {
-    const rarity = getCardRarity(card);
+    let rarity = getCardRarity(card);
+    
+    // Si c'est l'Ultimate déguisée, on force l'apparence Secrète (Rareté 7)
+    const isDisguised = (card.id === '999' && (state.ultimateDisguise || card.isDisguisedInChat));
+    if (isDisguised) rarity = 7;
+
     const cardEl = document.createElement('div');
     const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
     cardEl.className = `card ${rarityClass}`;
@@ -346,7 +385,11 @@ function createCardElement(card, isOwned, count = 0) {
         if (card.type === 'gold') cardEl.classList.add('effect-gold');
         if (card.type === 'red_gold') cardEl.classList.add('effect-red-gold');
         if (card.type === 'immersive') cardEl.classList.add('effect-immersive');
-        if (card.type === 'secret') {
+        
+        // Gestion des effets Ultimate vs Secret
+        if (card.id === '999' && !isDisguised) {
+            cardEl.classList.add('effect-ultimate');
+        } else if (card.type === 'secret' || isDisguised) {
             if (card.id === '199') {
                 cardEl.classList.add('card-secret-gold');
             } else if (card.id === '244') {
@@ -361,7 +404,57 @@ function createCardElement(card, isOwned, count = 0) {
 
     let innerHTML = `<div class="card-name">${card.name}</div>`;
 
-    if (card.is_item) {
+    if (card.id === '999') {
+        cardEl.onmouseenter = startUltimateEffect;
+        cardEl.onmouseleave = stopUltimateEffect;
+        cardEl.onclick = (e) => {
+            e.stopPropagation();
+            openMasterMenu();
+        };
+
+        const disguiseId = card.isDisguisedInChat ? card.disguiseId : state.ultimateDisguise;
+        const disguiseData = disguiseId ? cards.find(c => c.id === disguiseId) : null;
+        
+        let visualHTML = `
+            <div class="ultimate-visual-container">
+                <div class="ultimate-cube">
+                    <div class="cube-face front"></div>
+                    <div class="cube-face back"></div>
+                    <div class="cube-face right"></div>
+                    <div class="cube-face left"></div>
+                    <div class="cube-face top"></div>
+                    <div class="cube-face bottom"></div>
+                </div>
+            </div>
+        `;
+
+        if (disguiseData) {
+            if (disguiseData.is_item) {
+                visualHTML = `
+                    <div class="card-image-container item-view">
+                        <img src="cards_images/${disguiseData.item_asset}" class="mc-item" alt="${disguiseData.name}">
+                    </div>
+                `;
+            } else {
+                visualHTML = `
+                    <div class="card-image-container">
+                        <div class="mc-block">
+                            <div class="mc-face top" style="background-image: url('cards_images/${disguiseData.top}')"></div>
+                            <div class="mc-face right" style="background-image: url('cards_images/${disguiseData.side}')"></div>
+                            <div class="mc-face left" style="background-image: url('cards_images/${disguiseData.side}')"></div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        innerHTML = `
+            ${!disguiseData ? '<div class="card-ultimate-vortex"></div>' : ''}
+            <div class="card-name" style="font-size: ${disguiseData ? '0.75rem' : '1rem'}">${disguiseData ? disguiseData.name.toUpperCase() : card.name}</div>
+            ${!disguiseData ? '<div style="font-size: 0.5rem; color: #fff; text-align: center; margin-top: -10px; z-index: 10; position: relative; opacity: 0.7;">(CLIQUEZ)</div>' : ''}
+            ${visualHTML}
+        `;
+    } else if (card.is_item) {
         innerHTML += `
             <div class="card-image-container item-view">
                 <img src="cards_images/${card.item_asset}" class="mc-item" alt="${card.name}">
@@ -837,6 +930,7 @@ async function renderAdminView() {
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button onclick="adminGiveAllCards()">Se donner TOUTES les cartes</button>
                     <button onclick="adminResetSelf()" style="background: #e67e22;">Réinitialiser MA collection</button>
+                    <button onclick="adminResetPrestige()" style="background: #f39c12; color: #000;">Réinitialiser MON Prestige</button>
                     <button onclick="adminClearChat()" style="background: #c0392b;">Vider le CHAT GLOBAL</button>
                 </div>
             </div>
@@ -942,6 +1036,16 @@ window.adminResetSelf = () => {
         state.inventory = []; state.emeralds = 1000;
         saveState();
         renderInventory();
+    }
+};
+
+window.adminResetPrestige = () => {
+    if (confirm("Réinitialiser TON niveau de Prestige à 0 ?")) {
+        state.prestige = 0;
+        saveState();
+        updateUI();
+        renderInventory();
+        alert("Prestige réinitialisé !");
     }
 };
 
@@ -1295,7 +1399,8 @@ function updateTradePicker(tradeId, currentOffer, myReady) {
     
     const counts = getInventoryCounts();
     let uniqueOwned = [...new Set(state.inventory.map(i => i.id))]
-        .map(id => cards.find(c => c.id === id));
+        .map(id => cards.find(c => c.id === id))
+        .filter(c => c && c.id !== '999'); // Exclure l'Ultimate du trade
     
     uniqueOwned.sort((a, b) => getCardRarity(a) - getCardRarity(b) || a.name.localeCompare(b.name));
 
@@ -1509,15 +1614,49 @@ async function renderChatView() {
                 if (isAdmin) prefix = '[ADMIN] ';
                 else if (isBeta) prefix = '[BETA TESTER] ';
 
+                const date = msg.timestamp ? msg.timestamp.toDate() : new Date();
+                const now = new Date();
+                const isToday = date.toDateString() === now.toDateString();
+                const yesterday = new Date();
+                yesterday.setDate(now.getDate() - 1);
+                const isYesterday = date.toDateString() === yesterday.toDateString();
+
+                let datePrefix = "";
+                if (isToday) datePrefix = "Aujourd'hui ";
+                else if (isYesterday) datePrefix = "Hier ";
+                else datePrefix = date.toLocaleDateString('fr-FR') + " ";
+
+                const timeStr = datePrefix + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
                 let contentHTML = `
-                    <span class="sender">${prefix}${msg.senderEmail}</span>
+                    <span class="sender">${prefix}${msg.senderEmail} <span class="chat-time">${timeStr}</span></span>
                     <span class="text">${msg.text || ''}</span>
                     ${isCurrentUserAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="position: absolute; right: 5px; top: 5px; padding: 2px 6px; background: #c0392b; font-size: 0.6rem; border-width: 1px;">X</button>` : ''}
                 `;
 
                 // Si le message contient une carte, on l'affiche
                 if (msg.cardId) {
-                    const cardData = cards.find(c => c.id === msg.cardId);
+                    let cardData;
+                    if (msg.cardId === '999') {
+                        // Cas spécial Master Card : on utilise le skin stocké dans le MESSAGE
+                        const disguiseData = msg.disguiseId ? cards.find(c => c.id === msg.disguiseId) : null;
+                        
+                        cardData = {
+                            id: '999',
+                            name: disguiseData ? disguiseData.name : "THE MASTER COLLECTION",
+                            // Si déguisée, on force le type 'secret' pour l'apparence, sinon 'ultimate'
+                            type: disguiseData ? 'secret' : 'ultimate',
+                            isDisguisedInChat: !!disguiseData,
+                            disguiseId: msg.disguiseId, // On utilise l'ID du message
+                            is_item: disguiseData ? disguiseData.is_item : false,
+                            item_asset: disguiseData ? disguiseData.item_asset : null,
+                            top: disguiseData ? disguiseData.top : null,
+                            side: disguiseData ? disguiseData.side : null
+                        };
+                    } else {
+                        cardData = cards.find(c => c.id === msg.cardId);
+                    }
+
                     if (cardData) {
                         const cardWrapper = document.createElement('div');
                         cardWrapper.className = 'chat-card-flex';
@@ -1541,6 +1680,103 @@ async function renderChatView() {
     document.getElementById('chat-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
+}
+
+window.openMasterMenu = () => {
+    const modal = document.createElement('div');
+    modal.style = "position:fixed; inset:0; z-index:2000000; background:rgba(0,0,0,0.95); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:50px;";
+    
+    // Check if player has all normal cards to allow prestige
+    const counts = getInventoryCounts();
+    const allNormalCardIds = cards.filter(c => c.id !== '999').map(c => c.id);
+    const ownedIds = Object.keys(counts);
+    const hasAll = allNormalCardIds.every(id => ownedIds.includes(id));
+
+    let prestigeBtn = '';
+    if (hasAll && (state.prestige || 0) === 0) {
+        prestigeBtn = `<button onclick="passPrestige()" style="margin-top:20px; background:#f1c40f; color:#000; font-size:1.5rem; padding:20px 40px; border:4px solid #fff; box-shadow: 0 0 20px #f1c40f;">PASSER PRESTIGE 1</button>`;
+    }
+
+    modal.innerHTML = `
+        <h2 style="color:white; margin-bottom:40px; text-transform:uppercase; letter-spacing:4px; text-shadow: 0 0 10px #fff;">LE CHOIX DU MAÎTRE</h2>
+        <div style="display:flex; gap:30px; flex-direction:column; align-items:center;">
+            <button onclick="this.parentElement.parentElement.remove(); openUltimateDisguisePicker()" style="background:#3498db; font-size:1.2rem; padding:15px 30px; border:3px solid #fff;">CHOISIR UN SKIN</button>
+            ${prestigeBtn}
+        </div>
+        <button onclick="this.parentElement.remove()" style="margin-top:50px; background:#c0392b; padding:10px 30px;">FERMER</button>
+    `;
+    document.body.appendChild(modal);
+};
+
+window.passPrestige = () => {
+    if (!confirm("⚠️ ATTENTION : Passer un prestige va RÉINITIALISER TOUT VOTRE INVENTAIRE.\nÊtes-vous absolument sûr de vouloir abandonner toutes vos cartes pour entrer dans la légende ?")) return;
+    
+    state.prestige = (state.prestige || 0) + 1;
+    state.inventory = [];
+    state.ultimateDisguise = null;
+    state.emeralds = 1000; // Reset emeralds as well
+    
+    saveState();
+    
+    // Fermer les modales et forcer le rafraichissement
+    const modals = document.querySelectorAll('div[style*="z-index: 2000000"]');
+    modals.forEach(m => m.remove());
+    
+    alert(`Félicitations ! Vous avez atteint le Prestige ${state.prestige} ! Le monde s'est paré d'or en votre honneur.`);
+    renderInventory();
+    updateUI();
+};
+
+window.openUltimateDisguisePicker = () => {
+    const modal = document.createElement('div');
+    modal.style = "position:fixed; inset:0; z-index:2000000; background:rgba(0,0,0,0.95); display:flex; flex-direction:column; align-items:center; padding:50px;";
+    
+    // Trier les cartes par rareté et exclure l'Ultimate ainsi que les Secrètes
+    const sortedCards = [...cards]
+        .filter(c => c.id !== '999' && c.type !== 'secret')
+        .sort((a, b) => getCardRarity(a) - getCardRarity(b) || a.name.localeCompare(b.name));
+
+    modal.innerHTML = `
+        <h2 style="color:white; margin-bottom:20px; text-transform:uppercase; letter-spacing:2px;">Choisir un skin pour la Master Card</h2>
+        <div class="inventory-grid-scroll" style="width:100%; max-width:1000px; background:#111; padding:20px; border:4px solid #000; display:grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap:10px;">
+            <div onclick="setUltimateDisguise(null)" class="mini-item-pick" style="border-color:#555; color:white; font-size:0.6rem; text-align:center; background:#222;">RESET SKIN</div>
+            ${sortedCards.map(c => {
+                const rarity = getCardRarity(c);
+                const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
+                return `
+                    <div class="mini-item-pick ${rarityClass}" onclick="setUltimateDisguise('${c.id}')">
+                        ${renderOnlyIcon(c)}
+                    </div>
+                `;
+            }).join('')}
+        </div>
+        <button onclick="this.parentElement.remove()" style="margin-top:20px; background:#c0392b; padding:10px 30px;">FERMER</button>
+    `;
+    document.body.appendChild(modal);
+};
+
+window.setUltimateDisguise = (cardId) => {
+    state.ultimateDisguise = cardId;
+    saveState();
+    renderInventory();
+    const modal = document.querySelector('div[style*="z-index: 2000000"]');
+    if (modal) modal.remove();
+};
+
+function renderOnlyIcon(card) {
+    const rarity = getCardRarity(card);
+    const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
+    return `<div class="mc-slot-item ${rarityClass}">
+        <div class="card-image-container ${card.is_item ? 'item-view' : ''}">
+            ${card.is_item ? `<img src="cards_images/${card.item_asset}" class="mc-item">` : `
+                <div class="mc-block">
+                    <div class="mc-face top" style="background-image: url('cards_images/${card.top}')"></div>
+                    <div class="mc-face right" style="background-image: url('cards_images/${card.side}')"></div>
+                    <div class="mc-face left" style="background-image: url('cards_images/${card.side}')"></div>
+                </div>
+            `}
+        </div>
+    </div>`;
 }
 
 window.deleteChatMessage = async (msgId) => {
@@ -1573,11 +1809,26 @@ function updateChatCardPicker() {
     const picker = document.getElementById('chat-card-picker');
     if (!picker) return;
 
-    const uniqueIds = [...new Set(state.inventory.map(i => i.id))];
-    picker.innerHTML = uniqueIds.map(id => {
-        const card = cards.find(c => c.id === id);
+    const counts = getInventoryCounts();
+    const uniqueIds = Object.keys(counts);
+    
+    // Transformer les IDs en objets de cartes et trier par rareté décroissante
+    const displayList = uniqueIds.map(id => {
+        let card = cards.find(c => c.id === id);
+        if (id === '999' && !card) {
+            card = { id: '999', type: 'ultimate', name: "THE MASTER COLLECTION" };
+        }
+        return card;
+    })
+    .filter(c => c)
+    .sort((a, b) => getCardRarity(b) - getCardRarity(a) || a.name.localeCompare(b.name));
+
+    picker.innerHTML = displayList.map(card => {
+        const rarity = getCardRarity(card);
+        const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
+
         return `
-            <div class="mini-item-pick" style="width: 50px; height: 50px; cursor: pointer;" onclick="sendCardToChat('${card.id}')">
+            <div class="mini-item-pick ${rarityClass}" style="width: 50px; height: 50px; cursor: pointer;" onclick="sendCardToChat('${card.id}')">
                 ${renderOnlyIcon(card)}
             </div>
         `;
@@ -1600,14 +1851,21 @@ window.sendCardToChat = async (cardId) => {
     
     document.getElementById('chat-card-picker').style.display = 'none';
     
+    const messageData = {
+        senderId: user.uid,
+        senderEmail: user.email,
+        cardId: cardId,
+        text: "regarder ce que jai !",
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    // Si c'est l'Ultimate, on envoie le déguisement actuel
+    if (cardId === '999' && state.ultimateDisguise) {
+        messageData.disguiseId = state.ultimateDisguise;
+    }
+    
     try {
-        await db.collection('messages').add({
-            senderId: user.uid,
-            senderEmail: user.email,
-            cardId: cardId,
-            text: "regarder ce que jai !",
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        await db.collection('messages').add(messageData);
     } catch (e) {
         console.error("Erreur d'envoi de carte:", e);
     }
@@ -1686,3 +1944,79 @@ function init() {
 }
 
 init();
+
+window.startUltimateEffect = () => {
+    if (document.getElementById('ultimate-ascension-overlay')) return;
+    
+    // Activer l'effet sur toutes les cartes (Aura Prestige si prestige > 0)
+    if (state.prestige > 0) {
+        document.body.classList.add('prestige-aura-active');
+    } else {
+        document.body.classList.add('ultimate-active');
+    }
+
+    // Créer l'overlay
+    const overlay = document.createElement('div');
+    overlay.id = 'ultimate-ascension-overlay';
+    
+    const titleText = state.prestige > 0 ? `PRESTIGE ${state.prestige}` : "VOUS ÊTES LE MAÎTRE";
+    const subTitleText = state.prestige > 0 ? "LE POUVOIR DORÉ EST VÔTRE" : "Bravo d'avoir complété toute la collection";
+    
+    overlay.innerHTML = `
+        <div class="ascension-rays"></div>
+        <div class="ascension-title" style="${state.prestige > 0 ? 'text-shadow: 0 0 20px #ffd700, 0 0 40px #ffd700, 0 0 60px #ffaa00;' : ''}">${titleText}</div>
+        <div class="ascension-subtitle" style="${state.prestige > 0 ? 'color: #ffd700; text-shadow: 0 0 10px #ffaa00;' : ''}">${subTitleText}</div>
+    `;
+    
+    // Ajouter des particules cosmiques plus intenses
+    for(let i=0; i<120; i++) {
+        const p = document.createElement('div');
+        p.className = 'cosmic-particle';
+        const size = Math.random() * 5 + 2;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+        p.style.left = '50%';
+        p.style.top = '50%';
+        
+        if (state.prestige > 0) {
+            p.style.background = Math.random() > 0.5 ? '#fff' : '#ffd700';
+        } else {
+            p.style.background = Math.random() > 0.5 ? '#fff' : '#00d2ff';
+        }
+        p.style.boxShadow = `0 0 10px ${p.style.background}`;
+        
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 50 + Math.random() * 100;
+        p.style.setProperty('--tx', (Math.cos(angle) * dist) + 'vw');
+        p.style.setProperty('--ty', (Math.sin(angle) * dist) + 'vh');
+        
+        const duration = Math.random() * 2 + 1;
+        p.style.animation = `particle-fly ${duration}s linear infinite`;
+        overlay.appendChild(p);
+    }
+
+    document.body.appendChild(overlay);
+    
+    // Forcer l'affichage immédiat
+    requestAnimationFrame(() => {
+        overlay.classList.add('active');
+    });
+};
+
+window.stopUltimateEffect = () => {
+    const overlay = document.getElementById('ultimate-ascension-overlay');
+    
+    // Retirer l'effet sur toutes les cartes
+    document.body.classList.remove('ultimate-active');
+    document.body.classList.remove('prestige-aura-active');
+
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => {
+            if (!overlay.classList.contains('active')) {
+                overlay.remove();
+            }
+        }, 300);
+    }
+};
+

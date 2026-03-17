@@ -7,7 +7,8 @@ window.CARD_CONFIG = {
     "rare": 3,
     "uncommon": 2,
     "common": 1,
-    "secret": 7
+    "secret": 7,
+    "ultimate": 8
   },
   "cards": [
     {

@@ -77,7 +77,37 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
   background-color: #444;
 }
 
-.card:hover { transform: scale(1.08) translateY(-10px); z-index: 10; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+.card:hover { 
+  transform: scale(1.08) translateY(-10px); 
+  z-index: 10; 
+  box-shadow: 0 20px 40px rgba(0,0,0,0.8); 
+}
+
+/* --- EFFET DE TRANSFORMATION GLOBALE (quand la Master Card est survolée) --- */
+.ultimate-active .card {
+  /* Texture Secrète Complète appliquée à TOUTES les cartes */
+  background: linear-gradient(135deg, #ff00c1, #00d2ff, #ff00c1) !important;
+  background-size: 200% 200% !important;
+  animation: chromatic-bg 2s infinite linear !important;
+  
+  /* Bordure Magique */
+  border: 5px solid transparent !important;
+  background-clip: padding-box, border-box !important;
+  background-origin: padding-box, border-box !important;
+  background-image:
+    linear-gradient(135deg, #ff00c1, #00d2ff, #ff00c1),
+    linear-gradient(45deg, #ff00c1, #00d2ff, #ffffff, #00d2ff, #ff00c1) !important;
+    
+  box-shadow: 0 0 25px rgba(0, 210, 255, 0.5) !important;
+}
+
+/* La Master Card garde son propre style blanc pur pour rester unique */
+.ultimate-active .card.rarity-8 {
+  background: radial-gradient(circle at center, #222 0%, #000 100%) !important;
+  border-color: #ffffff !important;
+  animation: none !important;
+}
+
 
 .card-name {
   width: 100%; text-align: center; font-size: 0.85rem; font-weight: 900;
@@ -458,6 +488,12 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
   margin-bottom: 5px; 
   display: block; 
 }
+.chat-time {
+  font-size: 0.7rem;
+  color: #888;
+  margin-left: 8px;
+  font-weight: normal;
+}
 .chat-message .text { 
   color: #fff; 
   font-size: 0.9rem; 
@@ -543,3 +579,213 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
 @keyframes fireworks-global { 0% { transform: scale(0); opacity: 1; } 100% { transform: scale(10); opacity: 0; } }
 @keyframes chromatic-bg { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 @keyframes electric-vibration { 0% { transform: translate(2px, 2px); } 50% { transform: translate(-2px, -1px); } 100% { transform: translate(1px, -2px); } }
+
+/* --- ULTIMATE CARD: THE MASTER COLLECTION --- */
+.rarity-8 { 
+    border-color: #ffffff !important; 
+    box-shadow: 0 0 25px rgba(255,255,255,0.6), inset 0 0 15px rgba(255,255,255,0.4) !important; 
+    position: relative; 
+    overflow: hidden; 
+}
+.card.effect-ultimate {
+    background: radial-gradient(circle at center, #222 0%, #000 100%) !important;
+}
+
+.card-ultimate-vortex {
+    position: absolute;
+    inset: -100%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(255, 255, 255, 0.1) 60deg,
+        transparent 120deg,
+        rgba(255, 255, 255, 0.1) 180deg,
+        transparent 240deg,
+        rgba(255, 255, 255, 0.1) 300deg,
+        transparent 360deg
+    );
+    animation: vortex-spin 15s infinite linear;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes vortex-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.ultimate-visual-container {
+    height: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    position: relative;
+    z-index: 5;
+}
+
+.ultimate-cube {
+    width: 60px;
+    height: 60px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: ultimate-cube-spin 8s infinite linear;
+}
+
+@keyframes ultimate-cube-spin {
+    0% { transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); }
+    100% { transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg); }
+}
+
+.cube-face {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.cube-face.front  { transform: translateZ(30px); }
+.cube-face.back   { transform: rotateY(180deg) translateZ(30px); }
+.cube-face.right  { transform: rotateY(90deg) translateZ(30px); }
+.cube-face.left   { transform: rotateY(-90deg) translateZ(30px); }
+.cube-face.top    { transform: rotateX(90deg) translateZ(30px); }
+.cube-face.bottom { transform: rotateX(-90deg) translateZ(30px); }
+
+.card.rarity-8 .card-name {
+    color: #fff !important;
+    text-shadow: 0 0 8px #fff, 0 0 15px #fff;
+    font-size: 1rem;
+    z-index: 10;
+    position: relative;
+    background: rgba(0,0,0,0.5);
+    padding: 5px;
+    width: 100%;
+    text-align: center;
+}
+
+/* --- EFFET ASCENSION ULTIME --- */
+#ultimate-ascension-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000000;
+    background: rgba(0, 0, 0, 0.9); /* Un peu de transparence pour voir le site derrière */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    pointer-events: none;
+    font-family: var(--minecraft-font);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+
+#ultimate-ascension-overlay.active {
+    opacity: 1;
+}
+
+.ascension-rays {
+    position: absolute;
+    width: 150vmax;
+    height: 150vmax;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        rgba(0, 210, 255, 0.2) 10deg,
+        transparent 20deg,
+        rgba(255, 255, 255, 0.2) 30deg,
+        transparent 40deg
+    );
+    animation: rays-rotate 15s infinite linear;
+    z-index: 1;
+}
+
+.ascension-title {
+    font-size: 4rem;
+    color: #fff;
+    text-shadow: 0 0 20px #fff, 0 0 40px #00d2ff, 0 0 60px #00d2ff;
+    z-index: 10;
+    text-align: center;
+    animation: title-pulse 2s infinite ease-in-out;
+    letter-spacing: 5px;
+}
+
+@keyframes title-pulse {
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.5); }
+}
+
+.ascension-subtitle {
+    font-size: 1.5rem;
+    color: #00d2ff;
+    margin-top: 20px;
+    z-index: 10;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px #00d2ff;
+}
+
+.cosmic-particle {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    filter: blur(2px);
+    animation: particle-fly linear infinite;
+}
+
+@keyframes particle-fly {
+    from { transform: translate(0, 0) scale(1); opacity: 1; }
+    to { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+}
+
+.ultimate-glitch-body {
+    animation: body-distort 0.2s infinite;
+}
+
+@keyframes body-distort {
+    0% { filter: hue-rotate(0deg) contrast(1); }
+    50% { filter: hue-rotate(90deg) contrast(1.5) brightness(1.2); transform: translate(2px, -1px); }
+    100% { filter: hue-rotate(0deg) contrast(1); }
+}
+
+/* --- MODE PRESTIGE (MENUS DORÉS) --- */
+.prestige-mode nav {
+    background: linear-gradient(to right, #111, #443300, #111) !important;
+    border-bottom: 4px solid #ffd700 !important;
+}
+.prestige-mode nav button {
+    border-color: #ffd700 !important;
+    color: #fff !important;
+}
+.prestige-mode nav button:hover {
+    background: #ffd700 !important;
+    color: #000 !important;
+}
+.prestige-mode .section-title {
+    border-left-color: #ffd700 !important;
+    color: #ffd700 !important;
+}
+.prestige-mode .collection-stats span {
+    color: #ffd700 !important;
+    text-shadow: 0 0 10px #ffd700;
+}
+.prestige-mode h1, .prestige-mode h2 {
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* --- EFFET PRESTIGE AURA --- */
+.prestige-aura-active .card {
+    background: radial-gradient(circle, #fff9c4, #fbc02d, #f57f17) !important;
+    border: 5px solid #fff176 !important;
+    box-shadow: 0 0 50px #ffd600, inset 0 0 30px rgba(255,255,255,0.8) !important;
+    animation: none !important;
+}
+.prestige-aura-active .card.rarity-8 {
+    border-color: #ffffff !important;
+    box-shadow: 0 0 25px rgba(255,255,255,0.6), inset 0 0 15px rgba(255,255,255,0.4) !important;
+    background: radial-gradient(circle at center, #332200 0%, #000 100%) !important;
+}
+
+
