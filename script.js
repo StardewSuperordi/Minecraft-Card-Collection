@@ -1385,6 +1385,49 @@ async function renderTradeView() {
         });
 }
 
+window.chatInitiateTrade = async (email) => {
+    const currentUser = auth.currentUser;
+    if (!email || email === currentUser.email) return;
+
+    if (!confirm(`Envoyer une demande d'échange à ${email} ?`)) return;
+
+    // Réutilisation de la logique de startTradeWithEmail mais avec l'email passé
+    const usersSnap = await db.collection('users').where('email', '==', email).get();
+    if (usersSnap.empty) {
+        alert("Joueur non trouvé !");
+        return;
+    }
+
+    const targetUserDoc = usersSnap.docs[0];
+    const targetUserId = targetUserDoc.id;
+
+    const existing = await db.collection('trades')
+        .where('senderId', '==', currentUser.uid)
+        .where('receiverId', '==', targetUserId)
+        .where('status', '==', 'pending')
+        .get();
+
+    if (!existing.empty) {
+        alert("Une demande est déjà en cours avec ce joueur.");
+        return;
+    }
+
+    await db.collection('trades').add({
+        senderId: currentUser.uid,
+        senderEmail: currentUser.email,
+        receiverId: targetUserId,
+        receiverEmail: email,
+        senderOffer: [],
+        receiverOffer: [],
+        senderReady: false,
+        receiverReady: false,
+        status: 'pending',
+        timestamp: Date.now()
+    });
+
+    alert(`Demande d'échange envoyée à ${email} !`);
+};
+
 window.startTradeWithEmail = async () => {
     const email = document.getElementById('trade-target-email').value.trim().toLowerCase();
     const currentUser = auth.currentUser;
@@ -1789,8 +1832,11 @@ async function renderChatView() {
 
                 const timeStr = datePrefix + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
+                const isMe = msg.senderEmail === user.email;
+                const tradeBtn = (!isMe) ? `<button class="chat-trade-btn" onclick="chatInitiateTrade('${msg.senderEmail}')" title="Demander un échange">🤝</button>` : '';
+
                 let contentHTML = `
-                    <span class="sender">${prefix}${msg.senderEmail}${prestigeSuffix} <span class="chat-time">${timeStr}</span></span>
+                    <span class="sender">${prefix}${msg.senderEmail}${prestigeSuffix} ${tradeBtn} <span class="chat-time">${timeStr}</span></span>
                     <span class="text">${msg.text || ''}</span>
                     ${isCurrentUserAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="position: absolute; right: 5px; top: 5px; padding: 2px 6px; background: #c0392b; font-size: 0.6rem; border-width: 1px;">X</button>` : ''}
                 `;
