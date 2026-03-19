@@ -205,6 +205,14 @@ function updateUI() {
     const boEl = document.getElementById('boosters-count');
     if (emEl) emEl.textContent = state.emeralds;
     if (boEl) boEl.textContent = `Boosters: ∞`;
+
+    // Visibilité Menu Maître : accessible si on possède la Master OU si on a déjà passé un prestige
+    const navMaster = document.getElementById('nav-master');
+    if (navMaster) {
+        const counts = getInventoryCounts();
+        const hasMaster = !!counts['999'];
+        navMaster.style.display = (hasMaster || (state.prestige || 0) > 0) ? 'inline-block' : 'none';
+    }
     
     if (state.prestige > 0) {
         document.body.classList.add('prestige-mode');
@@ -220,10 +228,18 @@ function getInventoryCounts() {
     });
 
     // --- LOGIQUE CARTE ULTIMATE (ID 999) ---
-    // Vérifier si l'utilisateur possède toutes les cartes normales (hors 999)
-    const allNormalCardIds = cards.filter(c => c.id !== '999').map(c => c.id);
+    // Pour obtenir la Master Card, il faut TOUTES les cartes actuellement débloquées
+    // Si prestige 0 : toutes les cartes de base (id !== 999 et category !== Ascension)
+    // Si prestige 1 : base + Ascension
+    const requiredCards = cards.filter(c => {
+        if (c.id === '999') return false;
+        if (c.category === 'Ascension' && (state.prestige || 0) === 0) return false;
+        return true;
+    });
+    
+    const requiredIds = requiredCards.map(c => c.id);
     const ownedIds = Object.keys(counts);
-    const hasAll = allNormalCardIds.every(id => ownedIds.includes(id));
+    const hasAll = requiredIds.every(id => ownedIds.includes(id));
 
     if (hasAll) {
         counts['999'] = 1;
@@ -274,7 +290,7 @@ function renderInventory() {
         displayList.sort((a, b) => {
             if (b.actual_rarity !== a.actual_rarity) return b.actual_rarity - a.actual_rarity;
             if (a.category !== b.category) {
-                const order = ['Blocks', 'Outils', 'Armures', 'Items', 'Musique', 'Secret'];
+                const order = ['Ascension', 'Blocks', 'Outils', 'Armures', 'Items', 'Musique', 'Secret'];
                 return order.indexOf(a.category) - order.indexOf(b.category);
             }
             if (a.category === 'Armures') {
@@ -310,9 +326,21 @@ function renderInventory() {
     }
 
     displayList.forEach(card => {
-        grid.appendChild(createCardElement(card, true, card.count));
+        grid.appendChild(createCardElement(card, true, card.count, !!simulatedUser));
     });
 }
+
+window.adminRemoveCard = (cardId, cardName) => {
+    if (!simulatedUser) return;
+    if (!confirm(`Supprimer une instance de "${cardName}" de l'inventaire de ${simulatedUser.email} ?`)) return;
+
+    const idx = state.inventory.findIndex(i => i.id === cardId);
+    if (idx !== -1) {
+        state.inventory.splice(idx, 1);
+        saveState();
+        renderInventory();
+    }
+};
 
 function renderIndex() {
     if (state.isOpening) return;
@@ -323,15 +351,25 @@ function renderIndex() {
     const counts = getInventoryCounts();
     const ownedUnique = Object.keys(counts).filter(id => id !== '999').length;
     const totalUnique = cards.filter(c => c.id !== '999').length;
+    
+    // Si la Master Card est possédée, on affiche ownedUnique + 1 (ex: 241 / 240)
+    const hasMaster = !!counts['999'];
+    const displayOwned = hasMaster ? ownedUnique + 1 : ownedUnique;
 
     const statsContainer = document.createElement('div');
     statsContainer.className = 'collection-stats';
-    statsContainer.innerHTML = `Complétion : <span>${ownedUnique} / ${totalUnique}</span> cards`;
+    statsContainer.innerHTML = `Complétion : <span>${displayOwned} / ${totalUnique}</span> cards`;
     content.appendChild(statsContainer);
 
-    const categories = ['Blocks', 'Outils', 'Armures', 'Items', 'Musique', 'Secret'];
+    const categories = ['Blocks', 'Outils', 'Armures', 'Items', 'Musique', 'Secret', 'Ascension'];
 
     categories.forEach(cat => {
+        // Ne pas afficher Ascension si on est prestige 0 et qu'on n'a aucune carte Ascension
+        if (cat === 'Ascension' && (state.prestige || 0) === 0) {
+            const hasAscension = cards.some(c => c.category === 'Ascension' && (counts[c.id] || 0) > 0);
+            if (!hasAscension) return;
+        }
+
         const catTitle = document.createElement('h2');
         catTitle.className = 'section-title';
         catTitle.textContent = cat;
@@ -370,7 +408,7 @@ function renderIndex() {
     });
 }
 
-function createCardElement(card, isOwned, count = 0) {
+function createCardElement(card, isOwned, count = 0, isSimulation = false) {
     let rarity = getCardRarity(card);
     
     // Si c'est l'Ultimate déguisée, on force l'apparence Secrète (Rareté 7)
@@ -383,8 +421,11 @@ function createCardElement(card, isOwned, count = 0) {
     
     if (isOwned) {
         if (card.type === 'gold') cardEl.classList.add('effect-gold');
+        if (card.type === 'green_gold') cardEl.classList.add('effect-green-gold');
         if (card.type === 'red_gold') cardEl.classList.add('effect-red-gold');
+        if (card.type === 'blue_dark_gold') cardEl.classList.add('effect-blue-dark-gold');
         if (card.type === 'immersive') cardEl.classList.add('effect-immersive');
+        if (card.type === 'immersive_orange_dark') cardEl.classList.add('effect-immersive-orange');
         
         // Gestion des effets Ultimate vs Secret
         if (card.id === '999' && !isDisguised) {
@@ -403,14 +444,16 @@ function createCardElement(card, isOwned, count = 0) {
     }
 
     let innerHTML = `<div class="card-name">${card.name}</div>`;
+    
+    // Ajout bouton de suppression admin en mode simulation
+    if (isSimulation && isOwned && card.id !== '999') {
+        innerHTML += `<button class="card-admin-delete" onclick="event.stopPropagation(); adminRemoveCard('${card.id}', '${card.name.replace(/'/g, "\\'")}')">🗑️</button>`;
+    }
 
     if (card.id === '999') {
         cardEl.onmouseenter = startUltimateEffect;
         cardEl.onmouseleave = stopUltimateEffect;
-        cardEl.onclick = (e) => {
-            e.stopPropagation();
-            openMasterMenu();
-        };
+        cardEl.onclick = (e) => e.stopPropagation();
 
         const disguiseId = card.isDisguisedInChat ? card.disguiseId : state.ultimateDisguise;
         const disguiseData = disguiseId ? cards.find(c => c.id === disguiseId) : null;
@@ -561,7 +604,15 @@ function startBoosterReveal(container, controls) {
     const results = [];
     const now = Date.now();
     
-    const isGodPack = Math.random() < 0.0005; // 1 chance sur 2000
+    // Vérifie si un God Pack est forcé pour ce booster
+    const isGodPack = state.forceNextGodPack === true || Math.random() < 0.0005; // Force ou 1 chance sur 2000
+    
+    // Si c'était forcé, on le reset immédiatement
+    if (state.forceNextGodPack) {
+        state.forceNextGodPack = false;
+        // La sauvegarde se fera à la fin de la fonction (saveState())
+    }
+
     if (isGodPack) {
         console.log("!!! GOD PACK !!!");
         const godPackTitle = document.createElement('h2');
@@ -588,12 +639,27 @@ function startBoosterReveal(container, controls) {
             if (i < 4) cardId = rand < 70 ? getRandomByActualRarity(1) : getRandomByActualRarity(2);
             else {
                 const r = Math.random() * 100;
-                if (r < 0.1) cardId = getRandomByActualRarity(6); // Red Gold (Divisé : 0.1%)
-                else if (r < 0.6) cardId = getRandomByActualRarity(5); // Gold (Divisé : 0.5%)
-                else if (r < 3.1) cardId = getRandomByActualRarity(4.5); // Immersive (Divisé : 2.5%)
-                else if (r < 8.1) cardId = getRandomByActualRarity(4.2); // Epic (Divisé : 5%)
-                else if (r < 18.1) cardId = getRandomByActualRarity(3); // Rare (Divisé : 10%)
-                else cardId = getRandomByActualRarity(2);
+                const isPrestige = (state.prestige || 0) >= 1;
+                const upgradeChance = isPrestige && Math.random() < 0.5;
+
+                if (r < 0.1) {
+                    // Red Gold (6) -> Blue Dark Gold (6.5)
+                    cardId = upgradeChance ? getRandomByActualRarity(6.5, true) : getRandomByActualRarity(6, true);
+                } else if (r < 0.6) {
+                    // Gold (5) -> Green Gold (5.5)
+                    cardId = upgradeChance ? getRandomByActualRarity(5.5, true) : getRandomByActualRarity(5, true);
+                } else if (r < 3.1) {
+                    // Immersive (4.5) -> Immersive Orange Dark (4.7)
+                    cardId = upgradeChance ? getRandomByActualRarity(4.7, true) : getRandomByActualRarity(4.5, true);
+                } else if (r < 8.1) {
+                    // Epic (4) -> Epic Blue Dark (4.2)
+                    cardId = upgradeChance ? getRandomByActualRarity(4.2, true) : getRandomByActualRarity(4, true);
+                } else if (r < 18.1) {
+                    // Rare (3) -> Rare Purple (3.2)
+                    cardId = upgradeChance ? getRandomByActualRarity(3.2, true) : getRandomByActualRarity(3, true);
+                } else {
+                    cardId = getRandomByActualRarity(2);
+                }
             }
         }
         if (cardId && !results.includes(cardId)) results.push(cardId);
@@ -607,26 +673,38 @@ function startBoosterReveal(container, controls) {
                 const rarity = getCardRarity(card);
 
                 // --- CINEMATIC REVEAL LOGIC ---
-                if (rarity >= 6) {
-                    // RED GOLD: Impact Total
+                if (rarity === 6.5) {
+                    cardEl.classList.add('red-gold-reveal'); // On réutilise l'anim mais on change le flash
+                    triggerFlash('flash-blue');
+                    document.body.classList.add('shake-screen');
+                    setTimeout(() => document.body.classList.remove('shake-screen'), 500);
+                } else if (rarity === 6) {
                     cardEl.classList.add('red-gold-reveal');
                     triggerFlash('flash-red');
                     document.body.classList.add('shake-screen');
                     setTimeout(() => document.body.classList.remove('shake-screen'), 500);
-                } else if (rarity >= 5) {
-                    // GOLD: Explosion Solaire
+                } else if (rarity === 5.5) {
+                    cardEl.classList.add('gold-reveal');
+                    triggerFlash('flash-green');
+                } else if (rarity === 5) {
                     cardEl.classList.add('gold-reveal');
                     triggerFlash('flash-gold');
-                } else if (rarity >= 4.5) {
-                    // IMMERSIVE: Tremblement Intense
+                } else if (rarity === 4.7) {
+                    cardEl.classList.add('epic-shake');
+                    triggerFlash('flash-orange');
+                } else if (rarity === 4.5) {
                     cardEl.classList.add('epic-shake');
                     triggerFlash('flash-white');
+                } else if (rarity === 4.2) {
+                    cardEl.classList.add('reveal-anim');
+                    triggerFlash('flash-blue');
+                } else if (rarity === 3.2) {
+                    cardEl.classList.add('reveal-anim');
+                    triggerFlash('flash-purple');
                 } else if (rarity >= 3) {
-                    // RARE / EPIC: Flash Standard
                     cardEl.classList.add('reveal-anim');
                     triggerFlash('flash-white');
                 } else {
-                    // COMMON: Révélation Normale
                     cardEl.classList.add('reveal-anim');
                 }
 
@@ -654,12 +732,38 @@ function triggerFlash(type = 'flash-white') {
     }
 }
 
-function getRandomByActualRarity(level) {
-    let possible = cards.filter(c => Math.floor(getCardRarity(c)) === Math.floor(level) && c.obtainable !== false);
-    if (possible.length === 0) possible = cards.filter(c => c.obtainable !== false); 
+function getRandomByActualRarity(level, exact = false) {
+    const isPrestige = (state.prestige || 0) >= 1;
+    let possible;
+    
+    if (exact) {
+        possible = cards.filter(c => getCardRarity(c) === level && c.obtainable !== false);
+    } else {
+        possible = cards.filter(c => Math.floor(getCardRarity(c)) === Math.floor(level) && c.obtainable !== false);
+    }
+
+    // Sécurité Prestige : Empêcher les cartes d'Ascension d'apparaître si on est Prestige 0
+    if (!isPrestige) {
+        possible = possible.filter(c => c.category !== 'Ascension');
+    }
+
+    // Fallback si l'exactitude n'a rien donné (pour éviter un crash)
+    if (possible.length === 0 && exact) {
+        possible = cards.filter(c => Math.floor(getCardRarity(c)) === Math.floor(level) && c.obtainable !== false);
+        if (!isPrestige) {
+            possible = possible.filter(c => c.category !== 'Ascension');
+        }
+    }
+
+    if (possible.length === 0) {
+        possible = cards.filter(c => c.obtainable !== false);
+        if (!isPrestige) {
+            possible = possible.filter(c => c.category !== 'Ascension');
+        }
+    }
+    
     return possible.length > 0 ? possible[Math.floor(Math.random() * possible.length)].id : null;
 }
-
 function renderBoosterView() {
     state.isOpening = false;
     document.getElementById('sort-controls').style.display = 'none';
@@ -716,7 +820,19 @@ function renderCraftView() {
 function renderOnlyIcon(card) {
     const rarity = getCardRarity(card);
     const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
-    return `<div class="mc-slot-item ${rarityClass}">
+    
+    // Ajout des classes d'effets pour que les icônes dans le craft soient cohérentes
+    let effectClass = '';
+    if (card.type === 'gold') effectClass = 'effect-gold';
+    else if (card.type === 'green_gold') effectClass = 'effect-green-gold';
+    else if (card.type === 'red_gold') effectClass = 'effect-red-gold';
+    else if (card.type === 'blue_dark_gold') effectClass = 'effect-blue-dark-gold';
+    else if (card.type === 'immersive') effectClass = 'effect-immersive';
+    else if (card.type === 'immersive_orange_dark') effectClass = 'effect-immersive-orange';
+    else if (card.type === 'secret') effectClass = 'effect-secret';
+    else if (card.type === 'ultimate') effectClass = 'effect-ultimate';
+
+    return `<div class="mc-slot-item ${rarityClass} ${effectClass}">
         <div class="card-image-container ${card.is_item ? 'item-view' : ''}">
             ${card.is_item ? `<img src="cards_images/${card.item_asset}" class="mc-item">` : `
                 <div class="mc-block">
@@ -733,19 +849,24 @@ function updateCraftPicker() {
     const picker = document.getElementById('craft-picker');
     if (!picker) return;
     const oldScroll = picker.scrollTop;
-    const counts = getInventoryCounts();
     
-    // Get unique owned cards that are not Secret
+    // On calcule les vrais comptes de l'inventaire (sans la Master Card virtuelle)
+    const counts = {};
+    state.inventory.forEach(item => {
+        counts[item.id] = (counts[item.id] || 0) + 1;
+    });
+    
+    // Get unique owned cards that are not Secret or Ultimate
     let uniqueOwned = [...new Set(state.inventory.map(i => i.id))]
         .map(id => cards.find(c => c.id === id))
-        .filter(c => c.type !== 'secret');
+        .filter(c => c && c.type !== 'secret' && c.type !== 'ultimate' && c.id !== '999');
     
     // Sort by rarity
     uniqueOwned.sort((a, b) => getCardRarity(a) - getCardRarity(b) || a.name.localeCompare(b.name));
 
     picker.innerHTML = uniqueOwned.map(card => {
         const inGrid = craftingSlots.filter(s => s && s.id === card.id).length;
-        const available = counts[card.id] - inGrid;
+        const available = (counts[card.id] || 0) - inGrid;
         if (available <= 0) return '';
         
         return `
@@ -809,7 +930,7 @@ function checkCraftPossible() {
     if (filled.length === 9) {
         const firstRarity = getCardRarity(filled[0]);
         const allSameRarity = filled.every(s => getCardRarity(s) === firstRarity);
-        if (allSameRarity && firstRarity < 7) {
+        if (allSameRarity && (firstRarity < 7)) {
             btn.disabled = false;
             return;
         }
@@ -834,8 +955,30 @@ window.performCraft = () => {
 
     // Déterminer la récompense à l'avance
     const nextRarityMap = { 1: 2, 2: 3, 3: 4, 4: 4.5, 4.5: 5, 5: 6, 6: 7 };
-    const nextRarity = nextRarityMap[baseRarity] || baseRarity;
-    const possibleReward = cards.filter(c => getCardRarity(c) === nextRarity);
+    let nextRarity = nextRarityMap[baseRarity] || baseRarity;
+    
+    // RÈGLES SPÉCIALES ASCENSION
+    // 9 Immersive Orange Dark (4.7) -> 1 Green Gold (5.5)
+    if (baseRarity === 4.7) nextRarity = 5.5;
+    // 9 Green Gold (5.5) -> 1 Blue Dark Gold (6.5)
+    if (baseRarity === 5.5) nextRarity = 6.5;
+    // 9 Blue Dark Gold (6.5) -> 1 Secrète (7)
+    if (baseRarity === 6.5) nextRarity = 7;
+
+    const possibleReward = cards.filter(c => {
+        const r = getCardRarity(c);
+        // On autorise les cartes non obtenables (Secret) pendant le craft pour éviter les crashs
+        return r === nextRarity && (c.obtainable !== false || r === 7);
+    });
+    
+    if (possibleReward.length === 0) {
+        console.error("Aucune récompense possible pour la rareté:", nextRarity);
+        state.isOpening = false;
+        gui.classList.remove('is-crafting');
+        btn.disabled = false;
+        return;
+    }
+
     const reward = possibleReward[Math.floor(Math.random() * possibleReward.length)];
 
     // Lancer l'animation
@@ -929,6 +1072,7 @@ async function renderAdminView() {
                 <h3>Mes Actions (Admin)</h3>
                 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                     <button onclick="adminGiveAllCards()">Se donner TOUTES les cartes</button>
+                    <button onclick="adminGivePrestigeCards()" style="background: #8e44ad;">Se donner les cartes Prestige I</button>
                     <button onclick="adminResetSelf()" style="background: #e67e22;">Réinitialiser MA collection</button>
                     <button onclick="adminResetPrestige()" style="background: #f39c12; color: #000;">Réinitialiser MON Prestige</button>
                     <button onclick="adminClearChat()" style="background: #c0392b;">Vider le CHAT GLOBAL</button>
@@ -978,6 +1122,7 @@ async function renderAdminView() {
                     ${userEmail} ${isBanned ? '[BANNI]' : ''} (${userData.emeralds || 0} 💎)
                 </span>
                 <div style="display: flex; gap: 5px; align-items: center;">
+                    <button onclick="adminForceGodPack('${userId}', '${userEmail}')" style="background: #f1c40f; color: #000; padding: 5px 10px; font-weight: bold;">FORCE GOD PACK</button>
                     <button onclick="adminSimulateUser('${userId}', '${userEmail}')" style="background: #e67e22; padding: 5px 10px;">SIMULER</button>
                     <input type="number" id="admin-emerald-amount-${userId}" value="0" style="width: 70px; padding: 5px; background: #333; color: white; border: 1px solid #555;">
                     <button onclick="adminGiveEmeralds('${userId}')" style="background: #27ae60;">+ 💎</button>
@@ -999,6 +1144,13 @@ async function renderAdminView() {
         listEl.appendChild(userRow);
     });
 }
+
+window.adminForceGodPack = async (uid, email) => {
+    if (confirm(`Forcer le prochain booster de ${email} à être un GOD PACK ?`)) {
+        await db.collection('users').doc(uid).update({ forceNextGodPack: true });
+        alert("Action confirmée ! Le prochain booster sera un God Pack.");
+    }
+};
 
 window.adminGiveSpecificCard = async (uid) => {
     const cardId = document.getElementById(`admin-card-select-${uid}`).value;
@@ -1025,9 +1177,11 @@ window.adminUnbanUser = async (uid, email) => {
 
 window.adminGiveAllCards = () => {
     const now = Date.now();
-    cards.forEach(c => state.inventory.push({ id: c.id, obtainedAt: now }));
+    // On ne donne que les cartes de base (pas la Master ni les Ascension)
+    cards.filter(c => c.id !== '999' && c.category !== 'Ascension')
+         .forEach(c => state.inventory.push({ id: c.id, obtainedAt: now }));
     saveState();
-    alert("Toutes les cartes ajoutées !");
+    alert("Toutes les cartes de base ont été ajoutées !");
     renderInventory();
 };
 
@@ -1614,6 +1768,13 @@ async function renderChatView() {
                 if (isAdmin) prefix = '[ADMIN] ';
                 else if (isBeta) prefix = '[BETA TESTER] ';
 
+                let prestigeSuffix = '';
+                if (msg.prestige && msg.prestige > 0) {
+                    const roman = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+                    const prestigeStr = roman[msg.prestige] || msg.prestige;
+                    prestigeSuffix = ` <span class="chat-prestige" style="color:#8e44ad; font-weight:bold; text-shadow:0 0 5px rgba(142,68,173,0.5);">PRESTIGE ${prestigeStr}</span>`;
+                }
+
                 const date = msg.timestamp ? msg.timestamp.toDate() : new Date();
                 const now = new Date();
                 const isToday = date.toDateString() === now.toDateString();
@@ -1629,7 +1790,7 @@ async function renderChatView() {
                 const timeStr = datePrefix + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 let contentHTML = `
-                    <span class="sender">${prefix}${msg.senderEmail} <span class="chat-time">${timeStr}</span></span>
+                    <span class="sender">${prefix}${msg.senderEmail}${prestigeSuffix} <span class="chat-time">${timeStr}</span></span>
                     <span class="text">${msg.text || ''}</span>
                     ${isCurrentUserAdmin ? `<button onclick="deleteChatMessage('${msg.id}')" style="position: absolute; right: 5px; top: 5px; padding: 2px 6px; background: #c0392b; font-size: 0.6rem; border-width: 1px;">X</button>` : ''}
                 `;
@@ -1682,83 +1843,78 @@ async function renderChatView() {
     });
 }
 
-window.openMasterMenu = () => {
-    const modal = document.createElement('div');
-    modal.style = "position:fixed; inset:0; z-index:2000000; background:rgba(0,0,0,0.95); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:50px;";
+window.passPrestige = () => {
+    if (!confirm("⚠️ ATTENTION : Passer un prestige va SACRIFIER votre Master Card pour débloquer de nouvelles cartes.\nÊtes-vous sûr ?")) return;
     
-    // Check if player has all normal cards to allow prestige
-    const counts = getInventoryCounts();
-    const allNormalCardIds = cards.filter(c => c.id !== '999').map(c => c.id);
-    const ownedIds = Object.keys(counts);
-    const hasAll = allNormalCardIds.every(id => ownedIds.includes(id));
+    // Effet d'explosion de la Master Card
+    triggerMasterExplosion(() => {
+        state.prestige = (state.prestige || 0) + 1;
+        state.ultimateDisguise = null;
+        
+        saveState();
+        
+        // Fermer les modales et forcer le rafraichissement
+        const modals = document.querySelectorAll('div[style*="z-index: 2000000"]');
+        modals.forEach(m => m.remove());
+        
+        alert(`Le pouvoir de la Master Card s'est libéré ! Vous êtes Prestige ${state.prestige}. De nouvelles cartes "Ascension" sont désormais disponibles dans les boosters. Collectez-les toutes pour reformer la Master Collection !`);
+        renderInventory();
+        updateUI();
+    });
+};
 
-    let prestigeBtn = '';
-    if (hasAll && (state.prestige || 0) === 0) {
-        prestigeBtn = `<button onclick="passPrestige()" style="margin-top:20px; background:#f1c40f; color:#000; font-size:1.5rem; padding:20px 40px; border:4px solid #fff; box-shadow: 0 0 20px #f1c40f;">PASSER PRESTIGE 1</button>`;
+function triggerMasterExplosion(callback) {
+    const overlay = document.createElement('div');
+    overlay.style = "position:fixed; inset:0; z-index:3000000; background:white; opacity:0; pointer-events:none; transition: opacity 0.5s;";
+    document.body.appendChild(overlay);
+
+    // Flash blanc initial
+    requestAnimationFrame(() => {
+        overlay.style.opacity = "1";
+    });
+
+    // Créer des particules d'explosion
+    const container = document.getElementById('fullscreen-fireworks');
+    if (container) {
+        container.innerHTML = '';
+        for (let i = 0; i < 200; i++) {
+            const p = document.createElement('div');
+            p.className = 'cosmic-particle';
+            p.style.left = '50%';
+            p.style.top = '50%';
+            p.style.background = Math.random() > 0.5 ? '#fff' : (Math.random() > 0.5 ? '#8e44ad' : '#2980b9');
+            p.style.width = (Math.random() * 10 + 5) + 'px';
+            p.style.height = p.style.width;
+            
+            const angle = Math.random() * Math.PI * 2;
+            const dist = 100 + Math.random() * 200;
+            p.style.setProperty('--tx', (Math.cos(angle) * dist) + 'vw');
+            p.style.setProperty('--ty', (Math.sin(angle) * dist) + 'vh');
+            p.style.animation = `particle-fly ${Math.random() * 1 + 0.5}s ease-out forwards`;
+            container.appendChild(p);
+        }
     }
 
-    modal.innerHTML = `
-        <h2 style="color:white; margin-bottom:40px; text-transform:uppercase; letter-spacing:4px; text-shadow: 0 0 10px #fff;">LE CHOIX DU MAÎTRE</h2>
-        <div style="display:flex; gap:30px; flex-direction:column; align-items:center;">
-            <button onclick="this.parentElement.parentElement.remove(); openUltimateDisguisePicker()" style="background:#3498db; font-size:1.2rem; padding:15px 30px; border:3px solid #fff;">CHOISIR UN SKIN</button>
-            ${prestigeBtn}
-        </div>
-        <button onclick="this.parentElement.remove()" style="margin-top:50px; background:#c0392b; padding:10px 30px;">FERMER</button>
-    `;
-    document.body.appendChild(modal);
-};
-
-window.passPrestige = () => {
-    if (!confirm("⚠️ ATTENTION : Passer un prestige va RÉINITIALISER TOUT VOTRE INVENTAIRE.\nÊtes-vous absolument sûr de vouloir abandonner toutes vos cartes pour entrer dans la légende ?")) return;
-    
-    state.prestige = (state.prestige || 0) + 1;
-    state.inventory = [];
-    state.ultimateDisguise = null;
-    state.emeralds = 1000; // Reset emeralds as well
-    
-    saveState();
-    
-    // Fermer les modales et forcer le rafraichissement
-    const modals = document.querySelectorAll('div[style*="z-index: 2000000"]');
-    modals.forEach(m => m.remove());
-    
-    alert(`Félicitations ! Vous avez atteint le Prestige ${state.prestige} ! Le monde s'est paré d'or en votre honneur.`);
-    renderInventory();
-    updateUI();
-};
-
-window.openUltimateDisguisePicker = () => {
-    const modal = document.createElement('div');
-    modal.style = "position:fixed; inset:0; z-index:2000000; background:rgba(0,0,0,0.95); display:flex; flex-direction:column; align-items:center; padding:50px;";
-    
-    // Trier les cartes par rareté et exclure l'Ultimate ainsi que les Secrètes
-    const sortedCards = [...cards]
-        .filter(c => c.id !== '999' && c.type !== 'secret')
-        .sort((a, b) => getCardRarity(a) - getCardRarity(b) || a.name.localeCompare(b.name));
-
-    modal.innerHTML = `
-        <h2 style="color:white; margin-bottom:20px; text-transform:uppercase; letter-spacing:2px;">Choisir un skin pour la Master Card</h2>
-        <div class="inventory-grid-scroll" style="width:100%; max-width:1000px; background:#111; padding:20px; border:4px solid #000; display:grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap:10px;">
-            <div onclick="setUltimateDisguise(null)" class="mini-item-pick" style="border-color:#555; color:white; font-size:0.6rem; text-align:center; background:#222;">RESET SKIN</div>
-            ${sortedCards.map(c => {
-                const rarity = getCardRarity(c);
-                const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
-                return `
-                    <div class="mini-item-pick ${rarityClass}" onclick="setUltimateDisguise('${c.id}')">
-                        ${renderOnlyIcon(c)}
-                    </div>
-                `;
-            }).join('')}
-        </div>
-        <button onclick="this.parentElement.remove()" style="margin-top:20px; background:#c0392b; padding:10px 30px;">FERMER</button>
-    `;
-    document.body.appendChild(modal);
-};
-
+    setTimeout(() => {
+        overlay.style.opacity = "0";
+        setTimeout(() => {
+            overlay.remove();
+            callback();
+        }, 500);
+    }, 1500);
+}
 window.setUltimateDisguise = (cardId) => {
     state.ultimateDisguise = cardId;
     saveState();
-    renderInventory();
+    
+    // Si on est dans l'onglet Master, on rafraichit la vue
+    const masterBtn = document.getElementById('nav-master');
+    if (masterBtn && masterBtn.classList.contains('active')) {
+        renderMasterTab();
+    } else {
+        renderInventory();
+    }
+    
     const modal = document.querySelector('div[style*="z-index: 2000000"]');
     if (modal) modal.remove();
 };
@@ -1766,7 +1922,19 @@ window.setUltimateDisguise = (cardId) => {
 function renderOnlyIcon(card) {
     const rarity = getCardRarity(card);
     const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
-    return `<div class="mc-slot-item ${rarityClass}">
+    
+    // Ajout des classes d'effets pour que les icônes dans le craft soient cohérentes
+    let effectClass = '';
+    if (card.type === 'gold') effectClass = 'effect-gold';
+    else if (card.type === 'green_gold') effectClass = 'effect-green-gold';
+    else if (card.type === 'red_gold') effectClass = 'effect-red-gold';
+    else if (card.type === 'blue_dark_gold') effectClass = 'effect-blue-dark-gold';
+    else if (card.type === 'immersive') effectClass = 'effect-immersive';
+    else if (card.type === 'immersive_orange_dark') effectClass = 'effect-immersive-orange';
+    else if (card.type === 'secret') effectClass = 'effect-secret';
+    else if (card.type === 'ultimate') effectClass = 'effect-ultimate';
+
+    return `<div class="mc-slot-item ${rarityClass} ${effectClass}">
         <div class="card-image-container ${card.is_item ? 'item-view' : ''}">
             ${card.is_item ? `<img src="cards_images/${card.item_asset}" class="mc-item">` : `
                 <div class="mc-block">
@@ -1884,6 +2052,7 @@ async function sendMessage() {
             senderId: user.uid,
             senderEmail: user.email,
             text: text,
+            prestige: state.prestige || 0,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         });
     } catch (e) {
@@ -1903,6 +2072,71 @@ function renderMarketView() {
     `;
 }
 
+function renderMasterTab() {
+    if (state.isOpening) return;
+    document.getElementById('sort-controls').style.display = 'none';
+    const content = document.getElementById('content');
+
+    const counts = getInventoryCounts();
+    const hasMaster = !!counts['999'];
+    const isPrestige = (state.prestige || 0) > 0;
+
+    if (!hasMaster && !isPrestige) {
+        content.innerHTML = `<h2 style="color:white; text-align:center; margin-top:50px;">Vous n'avez pas encore débloqué le Menu Maître.</h2>`;
+        return;
+    }
+
+    let prestigeBtn = '';
+    let masterSkinSection = '';
+
+    if (hasMaster) {
+        if (!isPrestige) {
+            prestigeBtn = `<button onclick="passPrestige()" style="margin-top:20px; background:#f1c40f; color:#000; font-size:1.5rem; padding:20px 40px; border:4px solid #fff; box-shadow: 0 0 20px #f1c40f; cursor:pointer; font-weight:bold;">SACRIFIER POUR PRESTIGE 1</button>`;
+        } else {
+            prestigeBtn = `<div style="color:#f1c40f; font-size:1.5rem; margin-top:20px; text-shadow: 0 0 10px #f1c40f; font-weight:bold;">VOUS ÊTES PRESTIGE ${state.prestige} (MAÎTRE RECONSTITUÉ)</div>`;
+        }
+
+        const sortedCards = [...cards]
+            .filter(c => c.id !== '999' && c.type !== 'secret')
+            .sort((a, b) => getCardRarity(a) - getCardRarity(b) || a.name.localeCompare(b.name));
+
+        masterSkinSection = `
+            <div style="margin-bottom: 50px;">
+                <h3 style="color:#3498db; margin-bottom:20px; text-transform:uppercase; letter-spacing:2px;">SKIN DE LA MASTER CARD</h3>
+                <div class="inventory-grid-scroll" style="width:100%; max-width:1000px; margin: 0 auto; background:#111; padding:20px; border:4px solid #000; display:grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap:15px; max-height: 400px; overflow-y: auto; box-shadow: inset 0 0 20px #000;">
+                    <div onclick="setUltimateDisguise(null)" class="mini-item-pick" style="border-color:#555; color:white; font-size:0.6rem; text-align:center; background:#222; cursor:pointer; display:flex; align-items:center; justify-content:center; aspect-ratio:1;">RESET SKIN</div>
+                    ${sortedCards.map(c => {
+                        const rarity = getCardRarity(c);
+                        const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
+                        return `
+                            <div class="mini-item-pick ${rarityClass}" onclick="setUltimateDisguise('${c.id}')" style="cursor:pointer; padding:5px;">
+                                ${renderOnlyIcon(c)}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        prestigeBtn = `
+            <div style="color:#f1c40f; font-size:1.5rem; margin-top:20px; text-shadow: 0 0 10px #f1c40f; font-weight:bold;">VOUS ÊTES PRESTIGE ${state.prestige}</div>
+            <p style="color:#fff; margin-top:20px; font-size:1.1rem;">La Master Card a été sacrifiée. Collectez toutes les cartes <b>Ascension</b> pour la récupérer !</p>
+        `;
+    }
+
+    content.innerHTML = `
+        <div style="text-align:center; padding:40px; background: rgba(0,0,0,0.5); border: 4px solid #8e44ad; margin-top: 20px; box-shadow: 0 0 30px rgba(142, 68, 173, 0.3);">
+            <h2 style="color:white; margin-bottom:40px; text-transform:uppercase; letter-spacing:4px; text-shadow: 0 0 10px #fff;">LE REPAIRE DU MAÎTRE</h2>
+
+            ${masterSkinSection}
+
+            <div style="margin-top: 50px; border-top: 2px solid #555; padding-top: 40px;">
+                <h3 style="color:#f1c40f; margin-bottom:20px; text-transform:uppercase; letter-spacing:2px;">ASCENSION</h3>
+                ${prestigeBtn}
+            </div>
+        </div>
+    `;
+}
 function setupNavigation() {
     const navs = [
         { id: 'nav-inventory', func: renderInventory },
@@ -1912,6 +2146,7 @@ function setupNavigation() {
         { id: 'nav-trade', func: renderTradeView },
         { id: 'nav-chat', func: renderChatView },
         { id: 'nav-market', func: renderMarketView },
+        { id: 'nav-master', func: renderMasterTab },
         { id: 'nav-admin', func: renderAdminView },
         { id: 'nav-beta', func: renderBetaView }
     ];
@@ -1997,6 +2232,9 @@ window.startUltimateEffect = () => {
 
     document.body.appendChild(overlay);
     
+    // Fermer au clic
+    overlay.onclick = stopUltimateEffect;
+
     // Forcer l'affichage immédiat
     requestAnimationFrame(() => {
         overlay.classList.add('active');
@@ -2018,5 +2256,15 @@ window.stopUltimateEffect = () => {
             }
         }, 300);
     }
+};
+
+window.adminGivePrestigeCards = () => {
+    const prestigeCards = cards.filter(c => c.category === 'Ascension');
+    prestigeCards.forEach(c => {
+        state.inventory.push({ id: c.id, obtainedAt: Date.now() });
+    });
+    saveState();
+    alert("Toutes les cartes Ascension ont été ajoutées !");
+    renderInventory();
 };
 

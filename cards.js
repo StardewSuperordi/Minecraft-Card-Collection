@@ -1,7 +1,10 @@
 window.CARD_CONFIG = {
   "rarity_settings": {
+    "blue_dark_gold": 6.5,
     "red_gold": 6,
+    "green_gold": 5.5,
     "gold": 5,
+    "immersive_orange_dark": 4.7,
     "immersive": 4.5,
     "epic": 4,
     "rare": 3,
@@ -451,8 +454,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "wooden_sword.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "50",
@@ -460,8 +462,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "wooden_pickaxe.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "51",
@@ -469,8 +470,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "wooden_axe.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "52",
@@ -478,8 +478,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "wooden_shovel.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "53",
@@ -487,8 +486,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "wooden_hoe.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "54",
@@ -496,8 +494,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "stone_sword.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "55",
@@ -505,8 +502,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "stone_pickaxe.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "56",
@@ -514,8 +510,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "stone_axe.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "57",
@@ -523,8 +518,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "stone_shovel.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "58",
@@ -532,8 +526,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "stone_hoe.png",
-      "category": "Outils",
-      "rarity_override": 1
+      "category": "Outils"
     },
     {
       "id": "59",
@@ -541,8 +534,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_sword.png",
-      "category": "Outils",
-      "rarity_override": 2
+      "category": "Outils"
     },
     {
       "id": "60",
@@ -550,8 +542,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_pickaxe.png",
-      "category": "Outils",
-      "rarity_override": 2
+      "category": "Outils"
     },
     {
       "id": "61",
@@ -559,8 +550,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_axe.png",
-      "category": "Outils",
-      "rarity_override": 2
+      "category": "Outils"
     },
     {
       "id": "62",
@@ -568,8 +558,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_shovel.png",
-      "category": "Outils",
-      "rarity_override": 2
+      "category": "Outils"
     },
     {
       "id": "63",
@@ -577,8 +566,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_hoe.png",
-      "category": "Outils",
-      "rarity_override": 2
+      "category": "Outils"
     },
     {
       "id": "64",
@@ -586,8 +574,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_sword.png",
-      "category": "Outils",
-      "rarity_override": 3
+      "category": "Outils"
     },
     {
       "id": "65",
@@ -595,8 +582,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_pickaxe.png",
-      "category": "Outils",
-      "rarity_override": 3
+      "category": "Outils"
     },
     {
       "id": "66",
@@ -604,8 +590,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_axe.png",
-      "category": "Outils",
-      "rarity_override": 3
+      "category": "Outils"
     },
     {
       "id": "67",
@@ -613,8 +598,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_shovel.png",
-      "category": "Outils",
-      "rarity_override": 3
+      "category": "Outils"
     },
     {
       "id": "68",
@@ -622,8 +606,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_hoe.png",
-      "category": "Outils",
-      "rarity_override": 3
+      "category": "Outils"
     },
     {
       "id": "69",
@@ -631,8 +614,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_sword.png",
-      "category": "Outils",
-      "rarity_override": 4
+      "category": "Outils"
     },
     {
       "id": "70",
@@ -640,8 +622,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_pickaxe.png",
-      "category": "Outils",
-      "rarity_override": 4
+      "category": "Outils"
     },
     {
       "id": "71",
@@ -649,8 +630,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_axe.png",
-      "category": "Outils",
-      "rarity_override": 4
+      "category": "Outils"
     },
     {
       "id": "72",
@@ -658,8 +638,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_shovel.png",
-      "category": "Outils",
-      "rarity_override": 4
+      "category": "Outils"
     },
     {
       "id": "73",
@@ -667,8 +646,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_hoe.png",
-      "category": "Outils",
-      "rarity_override": 4
+      "category": "Outils"
     },
     {
       "id": "74",
@@ -676,8 +654,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_sword.png",
-      "category": "Outils",
-      "rarity_override": 4.5
+      "category": "Outils"
     },
     {
       "id": "75",
@@ -685,8 +662,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_pickaxe.png",
-      "category": "Outils",
-      "rarity_override": 4.5
+      "category": "Outils"
     },
     {
       "id": "76",
@@ -694,8 +670,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_axe.png",
-      "category": "Outils",
-      "rarity_override": 4.5
+      "category": "Outils"
     },
     {
       "id": "77",
@@ -703,8 +678,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_shovel.png",
-      "category": "Outils",
-      "rarity_override": 4.5
+      "category": "Outils"
     },
     {
       "id": "78",
@@ -712,8 +686,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_hoe.png",
-      "category": "Outils",
-      "rarity_override": 4.5
+      "category": "Outils"
     },
     {
       "id": "79",
@@ -721,8 +694,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "mace.png",
-      "category": "Outils",
-      "rarity_override": 5
+      "category": "Outils"
     },
     {
       "id": "80",
@@ -730,8 +702,7 @@ window.CARD_CONFIG = {
       "type": "red_gold",
       "is_item": true,
       "item_asset": "galaxy_sword_SV.png",
-      "category": "Outils",
-      "rarity_override": 6
+      "category": "Outils"
     },
     {
       "id": "81",
@@ -739,8 +710,7 @@ window.CARD_CONFIG = {
       "type": "red_gold",
       "is_item": true,
       "item_asset": "nether_star.png",
-      "category": "Items",
-      "rarity_override": 6
+      "category": "Items"
     },
     {
       "id": "83",
@@ -748,8 +718,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "totem_of_undying.png",
-      "category": "Items",
-      "rarity_override": 5
+      "category": "Items"
     },
     {
       "id": "84",
@@ -757,8 +726,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "elytra.png",
-      "category": "Items",
-      "rarity_override": 5
+      "category": "Items"
     },
     {
       "id": "85",
@@ -766,8 +734,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "netherite_ingot.png",
-      "category": "Items",
-      "rarity_override": 5
+      "category": "Items"
     },
     {
       "id": "86",
@@ -775,8 +742,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "heart_of_the_sea.png",
-      "category": "Items",
-      "rarity_override": 5
+      "category": "Items"
     },
     {
       "id": "87",
@@ -784,8 +750,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "trident.png",
-      "category": "Items",
-      "rarity_override": 5
+      "category": "Items"
     },
     {
       "id": "89",
@@ -793,8 +758,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "dragon_breath.png",
-      "category": "Items",
-      "rarity_override": 4.5
+      "category": "Items"
     },
     {
       "id": "90",
@@ -802,8 +766,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "echo_shard.png",
-      "category": "Items",
-      "rarity_override": 4.5
+      "category": "Items"
     },
     {
       "id": "91",
@@ -811,8 +774,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "ominous_trial_key.png",
-      "category": "Items",
-      "rarity_override": 4.5
+      "category": "Items"
     },
     {
       "id": "92",
@@ -820,8 +782,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "music_disc_5.png",
-      "category": "Musique",
-      "rarity_override": 5
+      "category": "Musique"
     },
     {
       "id": "94",
@@ -829,8 +790,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "nautilus_shell.png",
-      "category": "Items",
-      "rarity_override": 4.5
+      "category": "Items"
     },
     {
       "id": "95",
@@ -838,8 +798,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "96",
@@ -847,8 +806,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "emerald.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "97",
@@ -856,8 +814,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "golden_apple.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "98",
@@ -865,8 +822,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "trial_key.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "99",
@@ -874,8 +830,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "end_crystal.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "100",
@@ -883,8 +838,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "experience_bottle.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "101",
@@ -892,8 +846,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "ghast_tear.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "102",
@@ -901,8 +854,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "golden_carrot.png",
-      "category": "Items",
-      "rarity_override": 4
+      "category": "Items"
     },
     {
       "id": "103",
@@ -910,8 +862,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "ender_pearl.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "104",
@@ -919,8 +870,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "blaze_rod.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "105",
@@ -928,8 +878,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "ender_eye.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "106",
@@ -937,8 +886,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "clock_00.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "107",
@@ -946,8 +894,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "compass_00.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "108",
@@ -955,8 +902,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "name_tag.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "109",
@@ -964,8 +910,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "saddle.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "110",
@@ -973,8 +918,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "glistering_melon_slice.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "111",
@@ -982,8 +926,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "magma_cream.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "112",
@@ -991,8 +934,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "phantom_membrane.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "113",
@@ -1000,8 +942,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "armadillo_scute.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "114",
@@ -1009,8 +950,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "slime_ball.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "115",
@@ -1018,8 +958,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "brewing_stand.png",
-      "category": "Items",
-      "rarity_override": 3
+      "category": "Items"
     },
     {
       "id": "117",
@@ -1027,8 +966,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_ingot.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "118",
@@ -1036,8 +974,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "gold_ingot.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "119",
@@ -1045,8 +982,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "copper_ingot.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "120",
@@ -1054,8 +990,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "lapis_lazuli.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "121",
@@ -1063,8 +998,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "quartz.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "122",
@@ -1072,8 +1006,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "amethyst_shard.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "123",
@@ -1081,8 +1014,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "cookie.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "124",
@@ -1090,8 +1022,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "bread.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "125",
@@ -1099,8 +1030,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "cake.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "126",
@@ -1108,8 +1038,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "cooked_beef.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "127",
@@ -1117,8 +1046,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "cooked_chicken.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "128",
@@ -1126,8 +1054,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "bucket.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "129",
@@ -1135,8 +1062,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "shears.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "130",
@@ -1144,8 +1070,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "flint_and_steel.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "131",
@@ -1153,8 +1078,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "fishing_rod.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "132",
@@ -1162,8 +1086,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "spyglass.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "133",
@@ -1171,8 +1094,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "bow.png",
-      "category": "Outils",
-      "rarity_override": 2
+      "category": "Outils"
     },
     {
       "id": "134",
@@ -1180,8 +1102,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "crossbow_standby.png",
-      "category": "Outils",
-      "rarity_override": 2
+      "category": "Outils"
     },
     {
       "id": "135",
@@ -1189,8 +1110,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "lead.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "136",
@@ -1198,8 +1118,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "honey_bottle.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "137",
@@ -1207,8 +1126,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "glow_ink_sac.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "138",
@@ -1216,8 +1134,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "blaze_powder.png",
-      "category": "Items",
-      "rarity_override": 2
+      "category": "Items"
     },
     {
       "id": "140",
@@ -1225,8 +1142,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "stick.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "141",
@@ -1234,8 +1150,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "coal.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "142",
@@ -1243,8 +1158,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "charcoal.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "143",
@@ -1252,8 +1166,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "raw_iron.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "144",
@@ -1261,8 +1174,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "raw_gold.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "145",
@@ -1270,8 +1182,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "raw_copper.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "146",
@@ -1279,8 +1190,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "bone.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "147",
@@ -1288,8 +1198,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "gunpowder.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "148",
@@ -1297,8 +1206,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "rotten_flesh.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "149",
@@ -1306,8 +1214,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "spider_eye.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "150",
@@ -1315,8 +1222,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "string.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "151",
@@ -1324,8 +1230,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "feather.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "152",
@@ -1333,8 +1238,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "leather.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "153",
@@ -1342,8 +1246,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "apple.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "154",
@@ -1351,8 +1254,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "carrot.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "155",
@@ -1360,8 +1262,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "potato.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "156",
@@ -1369,8 +1270,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "wheat.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "157",
@@ -1378,8 +1278,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "sugar.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "158",
@@ -1387,8 +1286,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "egg.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "159",
@@ -1396,8 +1294,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "paper.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "160",
@@ -1405,8 +1302,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "brick.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "161",
@@ -1414,8 +1310,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "nether_brick.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "162",
@@ -1423,8 +1318,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "clay_ball.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "163",
@@ -1432,8 +1326,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "snowball.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "164",
@@ -1441,8 +1334,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "bamboo.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "165",
@@ -1450,8 +1342,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "wheat_seeds.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "166",
@@ -1459,8 +1350,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "melon_seeds.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "167",
@@ -1468,8 +1358,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "pumpkin_seeds.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "168",
@@ -1477,8 +1366,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "beetroot_seeds.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "169",
@@ -1486,8 +1374,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "ink_sac.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "170",
@@ -1495,8 +1382,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "bowl.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "171",
@@ -1504,8 +1390,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "glass_bottle.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "172",
@@ -1513,8 +1398,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "firework_star.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "173",
@@ -1522,8 +1406,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "oak_boat.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "174",
@@ -1531,8 +1414,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "redstone.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "175",
@@ -1540,8 +1422,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "glowstone_dust.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "176",
@@ -1549,8 +1430,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "flint.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "177",
@@ -1558,8 +1438,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "feather.png",
-      "category": "Items",
-      "rarity_override": 1
+      "category": "Items"
     },
     {
       "id": "178",
@@ -1568,7 +1447,6 @@ window.CARD_CONFIG = {
       "is_item": true,
       "item_asset": "minecraft-fun-2606410071.gif",
       "category": "Secret",
-      "rarity_override": 7,
       "obtainable": false
     },
     {
@@ -1577,8 +1455,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_13.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "180",
@@ -1586,8 +1463,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_cat.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "181",
@@ -1595,8 +1471,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_blocks.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "182",
@@ -1604,8 +1479,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_chirp.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "183",
@@ -1613,8 +1487,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_far.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "184",
@@ -1622,8 +1495,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_mall.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "185",
@@ -1631,8 +1503,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_mellohi.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "186",
@@ -1640,8 +1511,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_stal.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "187",
@@ -1649,8 +1519,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_strad.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "188",
@@ -1658,8 +1527,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_ward.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "189",
@@ -1667,8 +1535,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "music_disc_11.png",
-      "category": "Musique",
-      "rarity_override": 4.5
+      "category": "Musique"
     },
     {
       "id": "190",
@@ -1676,8 +1543,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "music_disc_wait.png",
-      "category": "Musique",
-      "rarity_override": 4.5
+      "category": "Musique"
     },
     {
       "id": "191",
@@ -1685,8 +1551,7 @@ window.CARD_CONFIG = {
       "type": "red_gold",
       "is_item": true,
       "item_asset": "music_disc_pigstep.png",
-      "category": "Musique",
-      "rarity_override": 6
+      "category": "Musique"
     },
     {
       "id": "192",
@@ -1694,8 +1559,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "music_disc_otherside.png",
-      "category": "Musique",
-      "rarity_override": 5
+      "category": "Musique"
     },
     {
       "id": "193",
@@ -1703,8 +1567,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "music_disc_relic.png",
-      "category": "Musique",
-      "rarity_override": 5
+      "category": "Musique"
     },
     {
       "id": "194",
@@ -1712,8 +1575,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "music_disc_precipice.png",
-      "category": "Musique",
-      "rarity_override": 4.5
+      "category": "Musique"
     },
     {
       "id": "195",
@@ -1721,8 +1583,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "music_disc_creator.png",
-      "category": "Musique",
-      "rarity_override": 4.5
+      "category": "Musique"
     },
     {
       "id": "196",
@@ -1730,8 +1591,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "music_disc_creator_music_box.png",
-      "category": "Musique",
-      "rarity_override": 4.5
+      "category": "Musique"
     },
     {
       "id": "197",
@@ -1739,8 +1599,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_tears.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "198",
@@ -1748,8 +1607,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "music_disc_lava_chicken.png",
-      "category": "Musique",
-      "rarity_override": 4
+      "category": "Musique"
     },
     {
       "id": "199",
@@ -1758,7 +1616,6 @@ window.CARD_CONFIG = {
       "category": "Secret",
       "is_item": true,
       "item_asset": "gold_ingot_rotate.gif",
-      "rarity_override": 7,
       "obtainable": false
     },
     {
@@ -1767,8 +1624,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "leather_helmet.png",
-      "category": "Armures",
-      "rarity_override": 1
+      "category": "Armures"
     },
     {
       "id": "201",
@@ -1776,8 +1632,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "leather_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 1
+      "category": "Armures"
     },
     {
       "id": "202",
@@ -1785,8 +1640,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "leather_leggings.png",
-      "category": "Armures",
-      "rarity_override": 1
+      "category": "Armures"
     },
     {
       "id": "203",
@@ -1794,8 +1648,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "leather_boots.png",
-      "category": "Armures",
-      "rarity_override": 1
+      "category": "Armures"
     },
     {
       "id": "204",
@@ -1803,8 +1656,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "chainmail_helmet.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "205",
@@ -1812,8 +1664,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "chainmail_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "206",
@@ -1821,8 +1672,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "chainmail_leggings.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "207",
@@ -1830,8 +1680,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "chainmail_boots.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "208",
@@ -1839,8 +1688,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_helmet.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "209",
@@ -1848,8 +1696,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "210",
@@ -1857,8 +1704,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_leggings.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "211",
@@ -1866,8 +1712,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_boots.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "212",
@@ -1875,8 +1720,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "copper_helmet.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "213",
@@ -1884,8 +1728,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "copper_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "214",
@@ -1893,8 +1736,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "copper_leggings.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "215",
@@ -1902,8 +1744,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "copper_boots.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "216",
@@ -1911,8 +1752,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_helmet.png",
-      "category": "Armures",
-      "rarity_override": 3
+      "category": "Armures"
     },
     {
       "id": "217",
@@ -1920,8 +1760,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 3
+      "category": "Armures"
     },
     {
       "id": "218",
@@ -1929,8 +1768,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_leggings.png",
-      "category": "Armures",
-      "rarity_override": 3
+      "category": "Armures"
     },
     {
       "id": "219",
@@ -1938,8 +1776,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_boots.png",
-      "category": "Armures",
-      "rarity_override": 3
+      "category": "Armures"
     },
     {
       "id": "220",
@@ -1947,8 +1784,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_helmet.png",
-      "category": "Armures",
-      "rarity_override": 4
+      "category": "Armures"
     },
     {
       "id": "221",
@@ -1956,8 +1792,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 4
+      "category": "Armures"
     },
     {
       "id": "222",
@@ -1965,8 +1800,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_leggings.png",
-      "category": "Armures",
-      "rarity_override": 4
+      "category": "Armures"
     },
     {
       "id": "223",
@@ -1974,8 +1808,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_boots.png",
-      "category": "Armures",
-      "rarity_override": 4
+      "category": "Armures"
     },
     {
       "id": "224",
@@ -1983,8 +1816,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_helmet.png",
-      "category": "Armures",
-      "rarity_override": 4.5
+      "category": "Armures"
     },
     {
       "id": "225",
@@ -1992,8 +1824,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 4.5
+      "category": "Armures"
     },
     {
       "id": "226",
@@ -2001,8 +1832,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_leggings.png",
-      "category": "Armures",
-      "rarity_override": 4.5
+      "category": "Armures"
     },
     {
       "id": "227",
@@ -2010,8 +1840,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_boots.png",
-      "category": "Armures",
-      "rarity_override": 4.5
+      "category": "Armures"
     },
     {
       "id": "228",
@@ -2019,8 +1848,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "turtle_helmet.png",
-      "category": "Armures",
-      "rarity_override": 3
+      "category": "Armures"
     },
     {
       "id": "229",
@@ -2028,8 +1856,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "wolf_armor.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "230",
@@ -2037,8 +1864,7 @@ window.CARD_CONFIG = {
       "type": "common",
       "is_item": true,
       "item_asset": "leather_horse_armor.png",
-      "category": "Armures",
-      "rarity_override": 1
+      "category": "Armures"
     },
     {
       "id": "231",
@@ -2046,8 +1872,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "iron_horse_armor.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "232",
@@ -2055,8 +1880,7 @@ window.CARD_CONFIG = {
       "type": "rare",
       "is_item": true,
       "item_asset": "golden_horse_armor.png",
-      "category": "Armures",
-      "rarity_override": 3
+      "category": "Armures"
     },
     {
       "id": "233",
@@ -2064,8 +1888,7 @@ window.CARD_CONFIG = {
       "type": "epic",
       "is_item": true,
       "item_asset": "diamond_horse_armor.png",
-      "category": "Armures",
-      "rarity_override": 4
+      "category": "Armures"
     },
     {
       "id": "234",
@@ -2073,8 +1896,7 @@ window.CARD_CONFIG = {
       "type": "immersive",
       "is_item": true,
       "item_asset": "netherite_horse_armor.png",
-      "category": "Armures",
-      "rarity_override": 4.5
+      "category": "Armures"
     },
     {
       "id": "235",
@@ -2082,8 +1904,7 @@ window.CARD_CONFIG = {
       "type": "uncommon",
       "is_item": true,
       "item_asset": "copper_horse_armor.png",
-      "category": "Armures",
-      "rarity_override": 2
+      "category": "Armures"
     },
     {
       "id": "236",
@@ -2091,8 +1912,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "paladium_helmet.png",
-      "category": "Armures",
-      "rarity_override": 5
+      "category": "Armures"
     },
     {
       "id": "237",
@@ -2100,8 +1920,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "paladium_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 5
+      "category": "Armures"
     },
     {
       "id": "238",
@@ -2109,8 +1928,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "paladium_leggings.png",
-      "category": "Armures",
-      "rarity_override": 5
+      "category": "Armures"
     },
     {
       "id": "239",
@@ -2118,8 +1936,7 @@ window.CARD_CONFIG = {
       "type": "gold",
       "is_item": true,
       "item_asset": "paladium_boots.png",
-      "category": "Armures",
-      "rarity_override": 5
+      "category": "Armures"
     },
     {
       "id": "240",
@@ -2127,8 +1944,7 @@ window.CARD_CONFIG = {
       "type": "red_gold",
       "is_item": true,
       "item_asset": "endium_helmet.png",
-      "category": "Armures",
-      "rarity_override": 6
+      "category": "Armures"
     },
     {
       "id": "241",
@@ -2136,8 +1952,7 @@ window.CARD_CONFIG = {
       "type": "red_gold",
       "is_item": true,
       "item_asset": "endium_chestplate.png",
-      "category": "Armures",
-      "rarity_override": 6
+      "category": "Armures"
     },
     {
       "id": "242",
@@ -2145,8 +1960,7 @@ window.CARD_CONFIG = {
       "type": "red_gold",
       "is_item": true,
       "item_asset": "endium_leggings.png",
-      "category": "Armures",
-      "rarity_override": 6
+      "category": "Armures"
     },
     {
       "id": "243",
@@ -2154,8 +1968,7 @@ window.CARD_CONFIG = {
       "type": "red_gold",
       "is_item": true,
       "item_asset": "endium_boots.png",
-      "category": "Armures",
-      "rarity_override": 6
+      "category": "Armures"
     },
     {
       "id": "244",
@@ -2164,7 +1977,6 @@ window.CARD_CONFIG = {
       "is_item": true,
       "item_asset": "netherite_chestplate.png",
       "category": "Secret",
-      "rarity_override": 7,
       "obtainable": false
     },
     {
@@ -2174,8 +1986,411 @@ window.CARD_CONFIG = {
       "is_item": true,
       "item_asset": "pigeon.gif",
       "category": "Secret",
-      "rarity_override": 7,
       "obtainable": false
+    },
+    {
+      "id": "1006",
+      "name": "Bedrock [Ascension]",
+      "type": "green_gold",
+      "top": "bedrock.png",
+      "side": "bedrock.png",
+      "model": "bedrock.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1007",
+      "name": "Command Block [Ascension]",
+      "type": "green_gold",
+      "top": "command_block_front.png",
+      "side": "command_block_side.png",
+      "model": "command_block.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1008",
+      "name": "Barrier [Ascension]",
+      "type": "green_gold",
+      "top": "barrier.png",
+      "side": "barrier.png",
+      "model": "barrier.json",
+      "is_item": true,
+      "item_asset": "barrier_item.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1009",
+      "name": "Structure Block [Ascension]",
+      "type": "green_gold",
+      "top": "structure_block.png",
+      "side": "structure_block.png",
+      "model": "structure_block.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1010",
+      "name": "Tuff [Ascension]",
+      "type": "blue_dark_gold",
+      "top": "tuff.png",
+      "side": "tuff.png",
+      "model": "tuff.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1011",
+      "name": "Mace [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "mace.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1012",
+      "name": "Galaxy Sword [Ascension]",
+      "type": "blue_dark_gold",
+      "is_item": true,
+      "item_asset": "galaxy_sword_SV.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1013",
+      "name": "Nether Star [Ascension]",
+      "type": "blue_dark_gold",
+      "is_item": true,
+      "item_asset": "nether_star.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1014",
+      "name": "Totem of Undying [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "totem_of_undying.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1015",
+      "name": "Elytra [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "elytra.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1016",
+      "name": "Netherite Ingot [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "netherite_ingot.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1017",
+      "name": "Heart of the Sea [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "heart_of_the_sea.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1018",
+      "name": "Trident [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "trident.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1019",
+      "name": "Music Disc 5 [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "music_disc_5.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1020",
+      "name": "Music Disc Pigstep [Ascension]",
+      "type": "blue_dark_gold",
+      "is_item": true,
+      "item_asset": "music_disc_pigstep.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1021",
+      "name": "Music Disc Otherside [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "music_disc_otherside.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1022",
+      "name": "Music Disc Relic [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "music_disc_relic.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1023",
+      "name": "Paladium Helmet [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "paladium_helmet.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1024",
+      "name": "Paladium Chestplate [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "paladium_chestplate.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1025",
+      "name": "Paladium Leggings [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "paladium_leggings.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1026",
+      "name": "Paladium Boots [Ascension]",
+      "type": "green_gold",
+      "is_item": true,
+      "item_asset": "paladium_boots.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1027",
+      "name": "Endium Helmet [Ascension]",
+      "type": "blue_dark_gold",
+      "is_item": true,
+      "item_asset": "endium_helmet.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1028",
+      "name": "Endium Chestplate [Ascension]",
+      "type": "blue_dark_gold",
+      "is_item": true,
+      "item_asset": "endium_chestplate.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1029",
+      "name": "Endium Leggings [Ascension]",
+      "type": "blue_dark_gold",
+      "is_item": true,
+      "item_asset": "endium_leggings.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1030",
+      "name": "Endium Boots [Ascension]",
+      "type": "blue_dark_gold",
+      "is_item": true,
+      "item_asset": "endium_boots.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1031",
+      "name": "Dragon Egg [Ascension]",
+      "type": "immersive_orange_dark",
+      "top": "dragon_egg.png",
+      "side": "dragon_egg.png",
+      "model": "dragon_egg.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1032",
+      "name": "Beacon [Ascension]",
+      "type": "immersive_orange_dark",
+      "top": "beacon.png",
+      "side": "beacon.png",
+      "model": "beacon.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1033",
+      "name": "Netherite Block [Ascension]",
+      "type": "immersive_orange_dark",
+      "top": "netherite_block.png",
+      "side": "netherite_block.png",
+      "model": "netherite_block.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1034",
+      "name": "Spawner [Ascension]",
+      "type": "immersive_orange_dark",
+      "top": "spawner.png",
+      "side": "spawner.png",
+      "model": "spawner.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1035",
+      "name": "Conduit [Ascension]",
+      "type": "immersive_orange_dark",
+      "top": "conduit.png",
+      "side": "conduit.png",
+      "model": "conduit.json",
+      "category": "Ascension"
+    },
+    {
+      "id": "1036",
+      "name": "Netherite Sword [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_sword.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1037",
+      "name": "Netherite Pickaxe [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_pickaxe.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1038",
+      "name": "Netherite Axe [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_axe.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1039",
+      "name": "Netherite Shovel [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_shovel.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1040",
+      "name": "Netherite Hoe [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_hoe.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1041",
+      "name": "Dragon Breath [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "dragon_breath.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1042",
+      "name": "Echo Shard [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "echo_shard.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1043",
+      "name": "Ominous Trial Key [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "ominous_trial_key.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1044",
+      "name": "Nautilus Shell [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "nautilus_shell.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1045",
+      "name": "Music Disc 11 [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "music_disc_11.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1046",
+      "name": "Music Disc Wait [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "music_disc_wait.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1047",
+      "name": "Music Disc Precipice [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "music_disc_precipice.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1048",
+      "name": "Music Disc Creator [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "music_disc_creator.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1049",
+      "name": "Music Disc Creator (Music Box) [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "music_disc_creator_music_box.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1050",
+      "name": "Netherite Helmet [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_helmet.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1051",
+      "name": "Netherite Chestplate [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_chestplate.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1052",
+      "name": "Netherite Leggings [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_leggings.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1053",
+      "name": "Netherite Boots [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_boots.png",
+      "category": "Ascension"
+    },
+    {
+      "id": "1054",
+      "name": "Netherite Horse Armor [Ascension]",
+      "type": "immersive_orange_dark",
+      "is_item": true,
+      "item_asset": "netherite_horse_armor.png",
+      "category": "Ascension"
     }
   ]
 };

@@ -116,14 +116,45 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
   text-transform: uppercase;
 }
 
+.card-admin-delete {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #e74c3c;
+  color: white;
+  border: 2px solid white;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  padding: 0;
+  line-height: 1;
+}
+.card-admin-delete:hover {
+  background: #c0392b;
+  transform: scale(1.1);
+}
+
 /* BACKGROUNDS PAR RARETÉ */
 .rarity-1 { background: linear-gradient(135deg, #a0a0a0, #606060); border-color: #404040 !important; }
 .rarity-2 { background: linear-gradient(135deg, #4cd137, #44bd32); border-color: #2d8a22 !important; }
 .rarity-3 { background: linear-gradient(135deg, #00a8ff, #0097e6); border-color: #006eb3 !important; }
 .rarity-4 { background: linear-gradient(135deg, #9c88ff, #8c7ae6); border-color: #5f4eb3 !important; }
 .rarity-4-5 { background: linear-gradient(135deg, #6c5ce7, #8e44ad); border-color: #4b2c8a !important; }
+.rarity-4-7 { background: linear-gradient(135deg, #e67e22, #d35400); border-color: #fff !important; box-shadow: 0 0 25px #d35400; }
 .rarity-5 { background: radial-gradient(circle, #fff176, #ffd600, #ff8f00); border-color: #c4a000 !important; box-shadow: 0 0 25px #ffea00, inset 0 0 15px rgba(255,255,255,0.5); }
+.rarity-5-5 { background: linear-gradient(135deg, #009432, #00ff88, #009432) !important; border: 4px solid #004d1a !important; box-shadow: 0 0 35px #00ff88, inset 0 0 20px rgba(255, 255, 255, 0.6) !important; }
 .rarity-6 { background: radial-gradient(circle, #ff5252, #d32f2f, #1a1a1a); border: 4px solid #ff1744 !important; box-shadow: 0 0 35px #ff1744; }
+.rarity-6-5 { 
+  background: radial-gradient(circle, #ff00c1, #8e44ad, #1a1a2e) !important; 
+  border: 5px solid #ff00c1 !important; 
+  box-shadow: 0 0 35px rgba(142, 68, 173, 0.8), inset 0 0 20px rgba(255,255,255,0.4) !important; 
+}
 
 /* 7. SECRET */
 .rarity-7 {
@@ -229,23 +260,91 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
 }
 
 /* SPECIAL EFFECTS */
-.card:not(.locked).rarity-3::after, .card:not(.locked).rarity-4::after, .card:not(.locked).rarity-4-5::after, .card:not(.locked).rarity-6::after {
+.card:not(.locked).rarity-3::after, .card:not(.locked).rarity-4::after, .card:not(.locked).rarity-4-5::after, .card:not(.locked).rarity-6::after,
+.card:not(.locked).rarity-4-7::after, .card:not(.locked).rarity-5-5::after, .card:not(.locked).rarity-6-5::after {
   content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
   background: linear-gradient(45deg, transparent, rgba(255,255,255,0.25), transparent);
   transform: rotate(45deg); animation: shine 4s infinite; pointer-events: none;
 }
 @keyframes shine { 0% { transform: translateX(-100%) rotate(45deg); } 20%, 100% { transform: translateX(100%) rotate(45deg); } }
 
-.effect-gold::before, .effect-red-gold::before, .effect-immersive::before {
+.effect-gold::before, .effect-red-gold::before, .effect-immersive::before, .effect-immersive-orange::before, .effect-green-gold::before, .effect-blue-dark-gold::before {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(125deg, transparent 0%, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%, transparent 100%);
   background-size: 200% 200%; animation: gold-sweep 3s infinite linear; opacity: 0.6; pointer-events: none;
   z-index: 1;
 }
+
+.effect-immersive-orange { 
+    background: radial-gradient(circle, #e67e22, #d35400, #1a1a1a) !important; 
+    border: 4px solid #f39c12 !important; 
+    box-shadow: 0 0 35px #e67e22, inset 0 0 15px rgba(255,255,255,0.3) !important; 
+    animation: orange-immersive-glow 3s infinite alternate !important; 
+}
+
+@keyframes orange-immersive-glow { from { filter: brightness(1); } to { filter: brightness(1.1) contrast(1.1); } }
+
+.effect-green-gold {
+    background: radial-gradient(circle, #2ecc71, #27ae60, #0a192f) !important;
+    border: 5px solid transparent !important;
+    background-clip: padding-box, border-box !important;
+    background-origin: padding-box, border-box !important;
+    background-image:
+        radial-gradient(circle, #2ecc71, #27ae60, #0a192f),
+        linear-gradient(45deg, #2ecc71, #ffffff, #00ff88, #2ecc71) !important;
+    background-size: 100% 100%, 200% 200% !important;
+    animation: green-gold-glow 3s infinite alternate, chromatic-bg 3s infinite linear !important;
+    box-shadow: 0 0 50px rgba(46, 204, 113, 0.5), 0 0 25px rgba(241, 196, 15, 0.4), inset 0 0 35px rgba(255,255,255,0.2) !important;
+    position: relative;
+}
+
+.effect-green-gold::after {
+    content: "◈";
+    position: absolute;
+    font-size: 110px;
+    color: rgba(255,255,255,0.08);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    text-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
+
+
+
+@keyframes green-gold-glow { from { filter: brightness(1); } to { filter: brightness(1.2) contrast(1.1); } }
 @keyframes gold-sweep { 0% { background-position: 200% 0%; } 100% { background-position: -200% 0%; } }
 
 .effect-red-gold { animation: red-gold-glow 2s infinite alternate; }
 .effect-red-gold::after { content: "★"; position: absolute; font-size: 100px; color: rgba(255,255,255,0.05); top: 50%; left: 50%; transform: translate(-50%, -50%); }
+
+.effect-blue-dark-gold { 
+    background: radial-gradient(circle, #ff00c1, #8e44ad, #1a1a2e) !important; 
+    border: 5px solid transparent !important;
+    background-clip: padding-box, border-box !important;
+    background-origin: padding-box, border-box !important;
+    background-image: 
+        radial-gradient(circle, #ff00c1, #8e44ad, #1a1a2e), 
+        linear-gradient(45deg, #ff00c1, #ffffff, #8e44ad, #ff00c1) !important;
+    background-size: 100% 100%, 200% 200% !important;
+    animation: blue-dark-gold-glow 3s infinite alternate, chromatic-bg 3s infinite linear !important;
+    box-shadow: 0 0 60px rgba(255, 0, 193, 0.6), 0 0 30px rgba(142, 68, 173, 0.8), inset 0 0 40px rgba(255,255,255,0.3) !important; 
+    position: relative;
+}
+
+.effect-blue-dark-gold::after { 
+    content: "✦"; 
+    position: absolute; 
+    font-size: 120px; 
+    color: rgba(255,255,255,0.1); 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    pointer-events: none;
+    text-shadow: 0 0 20px rgba(255,255,255,0.2);
+}
+@keyframes blue-dark-gold-glow { from { filter: brightness(1); } to { filter: brightness(1.2) contrast(1.1); } }
 @keyframes red-gold-glow { from { filter: brightness(1); } to { filter: brightness(1.3); } }
 
 /* RENDU 3D */
@@ -310,6 +409,10 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
 .rare-flash { position: fixed; inset: 0; pointer-events: none; opacity: 0; z-index: 2000; }
 .flash-white { background: white; animation: flash-anim 0.8s ease-out; }
 .flash-gold { background: #ffea00; animation: flash-anim 1s ease-out; }
+.flash-green { background: #2ecc71; animation: flash-anim 1s ease-out; }
+.flash-blue { background: #3498db; animation: flash-anim 1s ease-out; }
+.flash-purple { background: #9b59b6; animation: flash-anim 1s ease-out; }
+.flash-orange { background: #e67e22; animation: flash-anim 1s ease-out; }
 .flash-red { background: #ff0000; animation: flash-anim 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
 
 @keyframes flash-anim {
@@ -750,42 +853,45 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
     100% { filter: hue-rotate(0deg) contrast(1); }
 }
 
-/* --- MODE PRESTIGE (MENUS DORÉS) --- */
+/* --- MODE PRESTIGE (MENUS STYLE MASTER) --- */
 .prestige-mode nav {
-    background: linear-gradient(to right, #111, #443300, #111) !important;
-    border-bottom: 4px solid #ffd700 !important;
+    background: linear-gradient(to right, #1a1a2e, #8e44ad, #2980b9, #1a1a2e) !important;
+    border-bottom: 4px solid #fff !important;
+    box-shadow: 0 5px 20px rgba(142, 68, 173, 0.4);
 }
 .prestige-mode nav button {
-    border-color: #ffd700 !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
     color: #fff !important;
 }
-.prestige-mode nav button:hover {
-    background: #ffd700 !important;
-    color: #000 !important;
+.prestige-mode nav button:hover, .prestige-mode nav button.active {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: #fff !important;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5) !important;
 }
 .prestige-mode .section-title {
-    border-left-color: #ffd700 !important;
-    color: #ffd700 !important;
+    border-left-color: #8e44ad !important;
+    color: #fff !important;
+    text-shadow: 0 0 10px #8e44ad;
 }
 .prestige-mode .collection-stats span {
-    color: #ffd700 !important;
-    text-shadow: 0 0 10px #ffd700;
+    color: #2980b9 !important;
+    text-shadow: 0 0 10px #2980b9;
 }
 .prestige-mode h1, .prestige-mode h2 {
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    text-shadow: 0 0 15px rgba(142, 68, 173, 0.8);
 }
 
-/* --- EFFET PRESTIGE AURA --- */
+/* --- EFFET PRESTIGE AURA (STYLE MASTER) --- */
 .prestige-aura-active .card {
-    background: radial-gradient(circle, #fff9c4, #fbc02d, #f57f17) !important;
-    border: 5px solid #fff176 !important;
-    box-shadow: 0 0 50px #ffd600, inset 0 0 30px rgba(255,255,255,0.8) !important;
+    background: radial-gradient(circle, #2980b9, #8e44ad, #1a1a2e) !important;
+    border: 5px solid #fff !important;
+    box-shadow: 0 0 50px rgba(142, 68, 173, 0.8), inset 0 0 30px rgba(255,255,255,0.4) !important;
     animation: none !important;
 }
 .prestige-aura-active .card.rarity-8 {
     border-color: #ffffff !important;
-    box-shadow: 0 0 25px rgba(255,255,255,0.6), inset 0 0 15px rgba(255,255,255,0.4) !important;
-    background: radial-gradient(circle at center, #332200 0%, #000 100%) !important;
+    box-shadow: 0 0 35px rgba(255,255,255,0.8), inset 0 0 20px rgba(255,255,255,0.5) !important;
+    background: radial-gradient(circle at center, #222 0%, #000 100%) !important;
 }
 
 
