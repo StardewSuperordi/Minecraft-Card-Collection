@@ -424,7 +424,9 @@ function createCardElement(card, isOwned, count = 0, isSimulation = false) {
     if (isDisguised) rarity = 7;
 
     const cardEl = document.createElement('div');
-    const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
+    // On nettoie la rareté pour éviter les erreurs d'arrondi JS (ex: 4.7 devient 4.6999999)
+    const cleanRarity = Math.round(rarity * 10) / 10;
+    const rarityClass = `rarity-${cleanRarity.toString().replace('.', '-')}`;
     cardEl.className = `card ${rarityClass}`;
     
     if (isOwned) {
@@ -633,8 +635,11 @@ function startBoosterReveal(container, controls) {
     const results = [];
     const now = Date.now();
     
+    // Multiplicateur de chance basé sur le prestige (x2 par niveau)
+    const prestigeLuckMultiplier = Math.pow(2, state.prestige || 0);
+
     // Vérifie si un God Pack est forcé pour ce booster
-    const isGodPack = state.forceNextGodPack === true || Math.random() < 0.0005; // Force ou 1 chance sur 2000
+    const isGodPack = state.forceNextGodPack === true || Math.random() < (0.0005 * prestigeLuckMultiplier); // Chance doublée par prestige
     
     // Si c'était forcé, on le reset immédiatement
     if (state.forceNextGodPack) {
@@ -659,42 +664,57 @@ function startBoosterReveal(container, controls) {
         const i = results.length;
 
         if (isGodPack) {
-            let godRands = [4, 4.5, 5];
-            if (redGoldInPack < 1) godRands.push(6);
+            let godRands = [4, 4.5, 4.7, 4.9, 5, 5.5, 5.8];
+            if (redGoldInPack < 1) godRands.push(6, 6.5, 6.8);
             const targetRarity = godRands[Math.floor(Math.random() * godRands.length)];
-            cardId = getRandomByActualRarity(targetRarity);
-            if (cardId && cards.find(c => c.id === cardId).type === 'red_gold') redGoldInPack++;
+            cardId = getRandomByActualRarity(targetRarity, true);
+            const cType = cards.find(c => c.id === cardId)?.type;
+            if (cType === 'red_gold' || cType === 'blue_dark_gold' || cType === 'black_gold') redGoldInPack++;
         } else {
-            if (i < 4) cardId = rand < 70 ? getRandomByActualRarity(1) : getRandomByActualRarity(2);
-            else {
+            const prestigeLevel = (state.prestige || 0);
+            if (i < 4) {
+                const r = Math.random() * 100;
+                // Le prestige donne une chance que les 4 premières cartes deviennent Rares (3), Épiques (4) ou même supérieures
+                if (r < 0.5 * prestigeLevel) { // 1% au P2
+                    cardId = getRandomByActualRarity(4.5); // Immersive
+                } else if (r < 2 * prestigeLevel) { // 4% au P2
+                    cardId = getRandomByActualRarity(4); // Epic
+                } else if (r < 8 * prestigeLevel) { // 16% au P2
+                    cardId = getRandomByActualRarity(3); // Rare
+                } else {
+                    // Sinon, mélange Commun/Atypique classique, mais le Commun diminue avec le prestige
+                    cardId = (Math.random() * 100 < (70 - prestigeLevel * 10)) ? getRandomByActualRarity(1) : getRandomByActualRarity(2);
+                }
+            } else {
+                const prestigeMultiplier = Math.pow(2, state.prestige || 0);
                 const r = Math.random() * 100;
                 const isPrestige = (state.prestige || 0) >= 1;
                 const isPrestige2 = (state.prestige || 0) >= 2;
                 const upgradeChance = isPrestige && Math.random() < 0.5;
                 const upgradeChance2 = isPrestige2 && Math.random() < 0.5;
 
-                if (r < 0.1) {
+                if (r < 0.1 * prestigeMultiplier) {
                     // Red Gold (6) -> Blue Dark Gold (6.5) -> Black Gold (6.8)
                     let rarity = 6;
                     if (upgradeChance) rarity = 6.5;
                     if (upgradeChance2 && isPrestige2) rarity = 6.8;
                     cardId = getRandomByActualRarity(rarity, true);
-                } else if (r < 0.6) {
+                } else if (r < 0.6 * prestigeMultiplier) {
                     // Gold (5) -> Green Gold (5.5) -> White Gold (5.8)
                     let rarity = 5;
                     if (upgradeChance) rarity = 5.5;
                     if (upgradeChance2 && isPrestige2) rarity = 5.8;
                     cardId = getRandomByActualRarity(rarity, true);
-                } else if (r < 3.1) {
+                } else if (r < 3.1 * prestigeMultiplier) {
                     // Immersive (4.5) -> Immersive Orange Dark (4.7) -> Gray Immersive (4.9)
                     let rarity = 4.5;
                     if (upgradeChance) rarity = 4.7;
                     if (upgradeChance2 && isPrestige2) rarity = 4.9;
                     cardId = getRandomByActualRarity(rarity, true);
-                } else if (r < 8.1) {
+                } else if (r < 8.1 * prestigeMultiplier) {
                     // Epic (4) -> Epic Blue Dark (4.2)
                     cardId = upgradeChance ? getRandomByActualRarity(4.2, true) : getRandomByActualRarity(4, true);
-                } else if (r < 18.1) {
+                } else if (r < 18.1 * prestigeMultiplier) {
                     // Rare (3) -> Rare Purple (3.2)
                     cardId = upgradeChance ? getRandomByActualRarity(3.2, true) : getRandomByActualRarity(3, true);
                 } else {
@@ -713,46 +733,49 @@ function startBoosterReveal(container, controls) {
                 const rarity = getCardRarity(card);
 
                 // --- CINEMATIC REVEAL LOGIC ---
-                if (rarity === 6.8) {
-                    cardEl.classList.add('red-gold-reveal'); 
+                const type = card.type;
+                const rVal = Math.round(getCardRarity(card) * 10);
+                
+                if (type === 'black_gold') {
+                    cardEl.classList.add('vortex-reveal'); 
                     triggerFlash('flash-black');
                     document.body.classList.add('shake-screen');
                     setTimeout(() => document.body.classList.remove('shake-screen'), 500);
-                } else if (rarity === 6.5) {
+                } else if (type === 'white_gold') {
+                    cardEl.classList.add('light-reveal');
+                    triggerFlash('flash-silver');
+                } else if (type === 'gray_immersive') {
+                    cardEl.classList.add('spectral-reveal');
+                    triggerFlash('flash-silver');
+                } else if (type === 'blue_dark_gold') {
                     cardEl.classList.add('red-gold-reveal'); 
                     triggerFlash('flash-blue');
                     document.body.classList.add('shake-screen');
                     setTimeout(() => document.body.classList.remove('shake-screen'), 500);
-                } else if (rarity === 6) {
+                } else if (type === 'red_gold') {
                     cardEl.classList.add('red-gold-reveal');
                     triggerFlash('flash-red');
                     document.body.classList.add('shake-screen');
                     setTimeout(() => document.body.classList.remove('shake-screen'), 500);
-                } else if (rarity === 5.8) {
-                    cardEl.classList.add('gold-reveal');
-                    triggerFlash('flash-silver');
-                } else if (rarity === 5.5) {
+                } else if (type === 'green_gold') {
                     cardEl.classList.add('gold-reveal');
                     triggerFlash('flash-green');
-                } else if (rarity === 5) {
+                } else if (type === 'gold') {
                     cardEl.classList.add('gold-reveal');
                     triggerFlash('flash-gold');
-                } else if (rarity === 4.9) {
-                    cardEl.classList.add('epic-shake');
-                    triggerFlash('flash-silver');
-                } else if (rarity === 4.7) {
+                } else if (type === 'immersive_orange_dark') {
                     cardEl.classList.add('epic-shake');
                     triggerFlash('flash-orange');
-                } else if (rarity === 4.5) {
+                } else if (type === 'immersive') {
                     cardEl.classList.add('epic-shake');
                     triggerFlash('flash-white');
-                } else if (rarity === 4.2) {
+                } else if (rVal === 42) { // Epic Blue Dark
                     cardEl.classList.add('reveal-anim');
                     triggerFlash('flash-blue');
-                } else if (rarity === 3.2) {
+                } else if (rVal === 32) { // Rare Purple
                     cardEl.classList.add('reveal-anim');
                     triggerFlash('flash-purple');
-                } else if (rarity >= 3) {
+                } else if (rVal >= 30) { // All other Rares/Epics
                     cardEl.classList.add('reveal-anim');
                     triggerFlash('flash-white');
                 } else {
@@ -787,6 +810,11 @@ function getRandomByActualRarity(level, exact = false) {
     const isPrestige = (state.prestige || 0) >= 1;
     let possible;
     
+    // --- MODE TEST : UNIQUEMENT CARTES PRESTIGE ---
+    possible = cards.filter(c => (c.category === 'Prestige 1' || c.category === 'Prestige 2') && c.obtainable !== false);
+    return possible.length > 0 ? possible[Math.floor(Math.random() * possible.length)].id : null;
+    // ----------------------------------------------
+
     if (exact) {
         possible = cards.filter(c => getCardRarity(c) === level && c.obtainable !== false);
     } else {
@@ -879,7 +907,7 @@ function renderCraftView() {
 }
 
 function renderOnlyIcon(card) {
-    const rarity = getCardRarity(card);
+    const rarity = Math.round(getCardRarity(card) * 10) / 10;
     const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
     
     // Ajout des classes d'effets pour que les icônes dans le craft soient cohérentes
@@ -2037,7 +2065,7 @@ window.setUltimateDisguise = (cardId) => {
 };
 
 function renderOnlyIcon(card) {
-    const rarity = getCardRarity(card);
+    const rarity = Math.round(getCardRarity(card) * 10) / 10;
     const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
     
     // Ajout des classes d'effets pour que les icônes dans le craft soient cohérentes
@@ -2112,7 +2140,7 @@ function updateChatCardPicker() {
     .sort((a, b) => getCardRarity(b) - getCardRarity(a) || a.name.localeCompare(b.name));
 
     picker.innerHTML = displayList.map(card => {
-        const rarity = getCardRarity(card);
+        const rarity = Math.round(getCardRarity(card) * 10) / 10;
         const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
 
         return `
@@ -2227,8 +2255,8 @@ function renderMasterTab() {
                 <div class="inventory-grid-scroll" style="width:100%; max-width:1000px; margin: 0 auto; background:#111; padding:20px; border:4px solid #000; display:grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap:15px; max-height: 400px; overflow-y: auto; box-shadow: inset 0 0 20px #000;">
                     <div onclick="setUltimateDisguise(null)" class="mini-item-pick" style="border-color:#555; color:white; font-size:0.6rem; text-align:center; background:#222; cursor:pointer; display:flex; align-items:center; justify-content:center; aspect-ratio:1;">RESET SKIN</div>
                     ${sortedCards.map(c => {
-                        const rarity = getCardRarity(c);
-                        const rarityClass = `rarity-${rarity.toString().replace('.', '-')}`;
+                        const rarityVal = Math.round(getCardRarity(c) * 10) / 10;
+                        const rarityClass = `rarity-${rarityVal.toString().replace('.', '-')}`;
                         return `
                             <div class="mini-item-pick ${rarityClass}" onclick="setUltimateDisguise('${c.id}')" style="cursor:pointer; padding:5px;">
                                 ${renderOnlyIcon(c)}
