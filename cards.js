@@ -1,10 +1,13 @@
 window.CARD_CONFIG = {
   "rarity_settings": {
     "blue_dark_gold": 6.5,
+    "black_gold": 6.8,
     "red_gold": 6,
     "green_gold": 5.5,
+    "white_gold": 5.8,
     "gold": 5,
     "immersive_orange_dark": 4.7,
+    "gray_immersive": 4.9,
     "immersive": 4.5,
     "epic": 4,
     "rare": 3,
@@ -1990,407 +1993,811 @@ window.CARD_CONFIG = {
     },
     {
       "id": "1006",
-      "name": "Bedrock [Ascension]",
+      "name": "Bedrock [Prestige 1]",
       "type": "green_gold",
       "top": "bedrock.png",
       "side": "bedrock.png",
       "model": "bedrock.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1007",
-      "name": "Command Block [Ascension]",
+      "name": "Command Block [Prestige 1]",
       "type": "green_gold",
       "top": "command_block_front.png",
       "side": "command_block_side.png",
       "model": "command_block.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1008",
-      "name": "Barrier [Ascension]",
+      "name": "Barrier [Prestige 1]",
       "type": "green_gold",
       "top": "barrier.png",
       "side": "barrier.png",
       "model": "barrier.json",
       "is_item": true,
       "item_asset": "barrier_item.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1009",
-      "name": "Structure Block [Ascension]",
+      "name": "Structure Block [Prestige 1]",
       "type": "green_gold",
       "top": "structure_block.png",
       "side": "structure_block.png",
       "model": "structure_block.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1010",
-      "name": "Tuff [Ascension]",
+      "name": "Tuff [Prestige 1]",
       "type": "blue_dark_gold",
       "top": "tuff.png",
       "side": "tuff.png",
       "model": "tuff.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1011",
-      "name": "Mace [Ascension]",
+      "name": "Mace [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "mace.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1012",
-      "name": "Galaxy Sword [Ascension]",
+      "name": "Galaxy Sword [Prestige 1]",
       "type": "blue_dark_gold",
       "is_item": true,
       "item_asset": "galaxy_sword_SV.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1013",
-      "name": "Nether Star [Ascension]",
+      "name": "Nether Star [Prestige 1]",
       "type": "blue_dark_gold",
       "is_item": true,
       "item_asset": "nether_star.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1014",
-      "name": "Totem of Undying [Ascension]",
+      "name": "Totem of Undying [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "totem_of_undying.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1015",
-      "name": "Elytra [Ascension]",
+      "name": "Elytra [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "elytra.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1016",
-      "name": "Netherite Ingot [Ascension]",
+      "name": "Netherite Ingot [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "netherite_ingot.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1017",
-      "name": "Heart of the Sea [Ascension]",
+      "name": "Heart of the Sea [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "heart_of_the_sea.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1018",
-      "name": "Trident [Ascension]",
+      "name": "Trident [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "trident.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1019",
-      "name": "Music Disc 5 [Ascension]",
+      "name": "Music Disc 5 [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "music_disc_5.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1020",
-      "name": "Music Disc Pigstep [Ascension]",
+      "name": "Music Disc Pigstep [Prestige 1]",
       "type": "blue_dark_gold",
       "is_item": true,
       "item_asset": "music_disc_pigstep.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1021",
-      "name": "Music Disc Otherside [Ascension]",
+      "name": "Music Disc Otherside [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "music_disc_otherside.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1022",
-      "name": "Music Disc Relic [Ascension]",
+      "name": "Music Disc Relic [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "music_disc_relic.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1023",
-      "name": "Paladium Helmet [Ascension]",
+      "name": "Paladium Helmet [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "paladium_helmet.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1024",
-      "name": "Paladium Chestplate [Ascension]",
+      "name": "Paladium Chestplate [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "paladium_chestplate.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1025",
-      "name": "Paladium Leggings [Ascension]",
+      "name": "Paladium Leggings [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "paladium_leggings.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1026",
-      "name": "Paladium Boots [Ascension]",
+      "name": "Paladium Boots [Prestige 1]",
       "type": "green_gold",
       "is_item": true,
       "item_asset": "paladium_boots.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1027",
-      "name": "Endium Helmet [Ascension]",
+      "name": "Endium Helmet [Prestige 1]",
       "type": "blue_dark_gold",
       "is_item": true,
       "item_asset": "endium_helmet.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1028",
-      "name": "Endium Chestplate [Ascension]",
+      "name": "Endium Chestplate [Prestige 1]",
       "type": "blue_dark_gold",
       "is_item": true,
       "item_asset": "endium_chestplate.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1029",
-      "name": "Endium Leggings [Ascension]",
+      "name": "Endium Leggings [Prestige 1]",
       "type": "blue_dark_gold",
       "is_item": true,
       "item_asset": "endium_leggings.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1030",
-      "name": "Endium Boots [Ascension]",
+      "name": "Endium Boots [Prestige 1]",
       "type": "blue_dark_gold",
       "is_item": true,
       "item_asset": "endium_boots.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1031",
-      "name": "Dragon Egg [Ascension]",
+      "name": "Dragon Egg [Prestige 1]",
       "type": "immersive_orange_dark",
       "top": "dragon_egg.png",
       "side": "dragon_egg.png",
       "model": "dragon_egg.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1032",
-      "name": "Beacon [Ascension]",
+      "name": "Beacon [Prestige 1]",
       "type": "immersive_orange_dark",
       "top": "beacon.png",
       "side": "beacon.png",
       "model": "beacon.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1033",
-      "name": "Netherite Block [Ascension]",
+      "name": "Netherite Block [Prestige 1]",
       "type": "immersive_orange_dark",
       "top": "netherite_block.png",
       "side": "netherite_block.png",
       "model": "netherite_block.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1034",
-      "name": "Spawner [Ascension]",
+      "name": "Spawner [Prestige 1]",
       "type": "immersive_orange_dark",
       "top": "spawner.png",
       "side": "spawner.png",
       "model": "spawner.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1035",
-      "name": "Conduit [Ascension]",
+      "name": "Conduit [Prestige 1]",
       "type": "immersive_orange_dark",
       "top": "conduit.png",
       "side": "conduit.png",
       "model": "conduit.json",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1036",
-      "name": "Netherite Sword [Ascension]",
+      "name": "Netherite Sword [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_sword.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1037",
-      "name": "Netherite Pickaxe [Ascension]",
+      "name": "Netherite Pickaxe [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_pickaxe.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1038",
-      "name": "Netherite Axe [Ascension]",
+      "name": "Netherite Axe [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_axe.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1039",
-      "name": "Netherite Shovel [Ascension]",
+      "name": "Netherite Shovel [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_shovel.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1040",
-      "name": "Netherite Hoe [Ascension]",
+      "name": "Netherite Hoe [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_hoe.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1041",
-      "name": "Dragon Breath [Ascension]",
+      "name": "Dragon Breath [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "dragon_breath.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1042",
-      "name": "Echo Shard [Ascension]",
+      "name": "Echo Shard [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "echo_shard.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1043",
-      "name": "Ominous Trial Key [Ascension]",
+      "name": "Ominous Trial Key [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "ominous_trial_key.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1044",
-      "name": "Nautilus Shell [Ascension]",
+      "name": "Nautilus Shell [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "nautilus_shell.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1045",
-      "name": "Music Disc 11 [Ascension]",
+      "name": "Music Disc 11 [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "music_disc_11.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1046",
-      "name": "Music Disc Wait [Ascension]",
+      "name": "Music Disc Wait [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "music_disc_wait.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1047",
-      "name": "Music Disc Precipice [Ascension]",
+      "name": "Music Disc Precipice [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "music_disc_precipice.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1048",
-      "name": "Music Disc Creator [Ascension]",
+      "name": "Music Disc Creator [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "music_disc_creator.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1049",
-      "name": "Music Disc Creator (Music Box) [Ascension]",
+      "name": "Music Disc Creator (Music Box) [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "music_disc_creator_music_box.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1050",
-      "name": "Netherite Helmet [Ascension]",
+      "name": "Netherite Helmet [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_helmet.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1051",
-      "name": "Netherite Chestplate [Ascension]",
+      "name": "Netherite Chestplate [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_chestplate.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1052",
-      "name": "Netherite Leggings [Ascension]",
+      "name": "Netherite Leggings [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_leggings.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1053",
-      "name": "Netherite Boots [Ascension]",
+      "name": "Netherite Boots [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_boots.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
     },
     {
       "id": "1054",
-      "name": "Netherite Horse Armor [Ascension]",
+      "name": "Netherite Horse Armor [Prestige 1]",
       "type": "immersive_orange_dark",
       "is_item": true,
       "item_asset": "netherite_horse_armor.png",
-      "category": "Ascension"
+      "category": "Prestige 1"
+    },
+    {
+      "id": "221",
+      "name": "Bedrock [Prestige 2]",
+      "type": "white_gold",
+      "top": "bedrock.png",
+      "side": "bedrock.png",
+      "model": "bedrock.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "222",
+      "name": "Command Block [Prestige 2]",
+      "type": "white_gold",
+      "top": "command_block_front.png",
+      "side": "command_block_side.png",
+      "model": "command_block.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "223",
+      "name": "Barrier [Prestige 2]",
+      "type": "white_gold",
+      "top": "barrier.png",
+      "side": "barrier.png",
+      "model": "barrier.json",
+      "is_item": true,
+      "item_asset": "barrier_item.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "224",
+      "name": "Structure Block [Prestige 2]",
+      "type": "white_gold",
+      "top": "structure_block.png",
+      "side": "structure_block.png",
+      "model": "structure_block.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "235",
+      "name": "Dragon Egg [Prestige 2]",
+      "type": "gray_immersive",
+      "top": "dragon_egg.png",
+      "side": "dragon_egg.png",
+      "model": "dragon_egg.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "236",
+      "name": "Beacon [Prestige 2]",
+      "type": "gray_immersive",
+      "top": "beacon.png",
+      "side": "beacon.png",
+      "model": "beacon.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "237",
+      "name": "Netherite Block [Prestige 2]",
+      "type": "gray_immersive",
+      "top": "netherite_block.png",
+      "side": "netherite_block.png",
+      "model": "netherite_block.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "238",
+      "name": "Spawner [Prestige 2]",
+      "type": "gray_immersive",
+      "top": "spawner.png",
+      "side": "spawner.png",
+      "model": "spawner.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "239",
+      "name": "Conduit [Prestige 2]",
+      "type": "gray_immersive",
+      "top": "conduit.png",
+      "side": "conduit.png",
+      "model": "conduit.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2148",
+      "name": "Tuff [Prestige 2]",
+      "type": "black_gold",
+      "top": "tuff.png",
+      "side": "tuff.png",
+      "model": "tuff.json",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2374",
+      "name": "Netherite Sword [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_sword.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2375",
+      "name": "Netherite Pickaxe [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_pickaxe.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2376",
+      "name": "Netherite Axe [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_axe.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2377",
+      "name": "Netherite Shovel [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_shovel.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2378",
+      "name": "Netherite Hoe [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_hoe.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2279",
+      "name": "Mace [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "mace.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2180",
+      "name": "Galaxy Sword [Prestige 2]",
+      "type": "black_gold",
+      "is_item": true,
+      "item_asset": "galaxy_sword_SV.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2181",
+      "name": "Nether Star [Prestige 2]",
+      "type": "black_gold",
+      "is_item": true,
+      "item_asset": "nether_star.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2283",
+      "name": "Totem of Undying [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "totem_of_undying.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2284",
+      "name": "Elytra [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "elytra.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2285",
+      "name": "Netherite Ingot [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "netherite_ingot.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2286",
+      "name": "Heart of the Sea [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "heart_of_the_sea.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2287",
+      "name": "Trident [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "trident.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2389",
+      "name": "Dragon Breath [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "dragon_breath.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2390",
+      "name": "Echo Shard [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "echo_shard.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2391",
+      "name": "Ominous Trial Key [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "ominous_trial_key.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2292",
+      "name": "Music Disc 5 [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "music_disc_5.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "2394",
+      "name": "Nautilus Shell [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "nautilus_shell.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23189",
+      "name": "Music Disc 11 [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "music_disc_11.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23190",
+      "name": "Music Disc Wait [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "music_disc_wait.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "21191",
+      "name": "Music Disc Pigstep [Prestige 2]",
+      "type": "black_gold",
+      "is_item": true,
+      "item_asset": "music_disc_pigstep.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "22192",
+      "name": "Music Disc Otherside [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "music_disc_otherside.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "22193",
+      "name": "Music Disc Relic [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "music_disc_relic.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23194",
+      "name": "Music Disc Precipice [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "music_disc_precipice.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23195",
+      "name": "Music Disc Creator [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "music_disc_creator.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23196",
+      "name": "Music Disc Creator (Music Box) [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "music_disc_creator_music_box.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23224",
+      "name": "Netherite Helmet [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_helmet.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23225",
+      "name": "Netherite Chestplate [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_chestplate.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23226",
+      "name": "Netherite Leggings [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_leggings.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23227",
+      "name": "Netherite Boots [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_boots.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "23234",
+      "name": "Netherite Horse Armor [Prestige 2]",
+      "type": "gray_immersive",
+      "is_item": true,
+      "item_asset": "netherite_horse_armor.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "22236",
+      "name": "Paladium Helmet [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "paladium_helmet.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "22237",
+      "name": "Paladium Chestplate [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "paladium_chestplate.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "22238",
+      "name": "Paladium Leggings [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "paladium_leggings.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "22239",
+      "name": "Paladium Boots [Prestige 2]",
+      "type": "white_gold",
+      "is_item": true,
+      "item_asset": "paladium_boots.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "21240",
+      "name": "Endium Helmet [Prestige 2]",
+      "type": "black_gold",
+      "is_item": true,
+      "item_asset": "endium_helmet.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "21241",
+      "name": "Endium Chestplate [Prestige 2]",
+      "type": "black_gold",
+      "is_item": true,
+      "item_asset": "endium_chestplate.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "21242",
+      "name": "Endium Leggings [Prestige 2]",
+      "type": "black_gold",
+      "is_item": true,
+      "item_asset": "endium_leggings.png",
+      "category": "Prestige 2"
+    },
+    {
+      "id": "21243",
+      "name": "Endium Boots [Prestige 2]",
+      "type": "black_gold",
+      "is_item": true,
+      "item_asset": "endium_boots.png",
+      "category": "Prestige 2"
     }
   ]
 };

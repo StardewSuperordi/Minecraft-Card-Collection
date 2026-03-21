@@ -268,12 +268,78 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
 }
 @keyframes shine { 0% { transform: translateX(-100%) rotate(45deg); } 20%, 100% { transform: translateX(100%) rotate(45deg); } }
 
-.effect-gold::before, .effect-red-gold::before, .effect-immersive::before, .effect-immersive-orange::before, .effect-green-gold::before, .effect-blue-dark-gold::before {
+.effect-gold::before, .effect-red-gold::before, .effect-immersive::before, .effect-immersive-orange::before, .effect-green-gold::before, .effect-blue-dark-gold::before, .effect-black-gold::before, .effect-white-gold::before, .effect-gray-immersive::before {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(125deg, transparent 0%, transparent 40%, rgba(255,255,255,0.4) 50%, transparent 60%, transparent 100%);
   background-size: 200% 200%; animation: gold-sweep 3s infinite linear; opacity: 0.6; pointer-events: none;
   z-index: 1;
 }
+
+.effect-gray-immersive {
+    background: radial-gradient(circle, #7f8c8d, #34495e, #1a1a1a) !important;
+    border: 4px solid #95a5a6 !important;
+    box-shadow: 0 0 35px #7f8c8d, inset 0 0 15px rgba(255,255,255,0.3) !important;
+    animation: gray-immersive-glow 3s infinite alternate !important;
+}
+
+@keyframes gray-immersive-glow { from { filter: brightness(1); } to { filter: brightness(1.2) contrast(1.1); } }
+
+.effect-white-gold {
+    background: radial-gradient(circle, #ffffff, #bdc3c7, #2c3e50) !important;
+    border: 5px solid transparent !important;
+    background-clip: padding-box, border-box !important;
+    background-origin: padding-box, border-box !important;
+    background-image:
+        radial-gradient(circle, #ffffff, #bdc3c7, #2c3e50),
+        linear-gradient(45deg, #ffffff, #7f8c8d, #ffffff, #bdc3c7) !important;
+    background-size: 100% 100%, 200% 200% !important;
+    animation: white-gold-glow 3s infinite alternate, chromatic-bg 3s infinite linear !important;
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.5), 0 0 25px rgba(189, 195, 199, 0.4), inset 0 0 35px rgba(255,255,255,0.2) !important;
+    position: relative;
+}
+
+.effect-white-gold::after {
+    content: "✧";
+    position: absolute;
+    font-size: 110px;
+    color: rgba(255,255,255,0.15);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    text-shadow: 0 0 15px rgba(255,255,255,0.3);
+}
+
+@keyframes white-gold-glow { from { filter: brightness(1); } to { filter: brightness(1.2) contrast(1.1); } }
+
+.effect-black-gold {
+    background: radial-gradient(circle, #2c3e50, #000000, #1a1a1a) !important;
+    border: 5px solid transparent !important;
+    background-clip: padding-box, border-box !important;
+    background-origin: padding-box, border-box !important;
+    background-image:
+        radial-gradient(circle, #2c3e50, #000000, #1a1a1a),
+        linear-gradient(45deg, #000000, #34495e, #000000, #2c3e50) !important;
+    background-size: 100% 100%, 200% 200% !important;
+    animation: black-gold-glow 3s infinite alternate, chromatic-bg 3s infinite linear !important;
+    box-shadow: 0 0 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(44, 62, 80, 0.9), inset 0 0 40px rgba(255,255,255,0.1) !important;
+    position: relative;
+}
+
+.effect-black-gold::after {
+    content: "✹";
+    position: absolute;
+    font-size: 120px;
+    color: rgba(255,255,255,0.05);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    text-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+@keyframes black-gold-glow { from { filter: brightness(1); } to { filter: brightness(1.4) contrast(1.2); } }
+
 
 .effect-immersive-orange { 
     background: radial-gradient(circle, #e67e22, #d35400, #1a1a1a) !important; 
@@ -414,6 +480,8 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
 .flash-purple { background: #9b59b6; animation: flash-anim 1s ease-out; }
 .flash-orange { background: #e67e22; animation: flash-anim 1s ease-out; }
 .flash-red { background: #ff0000; animation: flash-anim 1.2s cubic-bezier(0.19, 1, 0.22, 1); }
+.flash-black { background: #000000; animation: flash-anim 1.5s cubic-bezier(0.19, 1, 0.22, 1); }
+.flash-silver { background: #bdc3c7; animation: flash-anim 1s ease-out; }
 
 @keyframes flash-anim {
   0% { opacity: 0.9; }
@@ -780,8 +848,57 @@ select { padding: 12px; background: #111; color: white; border: 4px solid #000; 
     text-align: center;
 }
 
-/* --- EFFET ASCENSION ULTIME --- */
-#ultimate-ascension-overlay {
+/* --- EFFET FISSURES ULTIMATE (PRESTIGE 2) --- */
+.cube-cracks {
+    position: absolute;
+    inset: 0;
+    background: 
+        linear-gradient(45deg, transparent 45%, #fff 48%, #fff 52%, transparent 55%),
+        linear-gradient(-45deg, transparent 40%, #fff 43%, #fff 47%, transparent 50%);
+    background-size: 100% 100%;
+    opacity: 0.8;
+    filter: drop-shadow(0 0 5px #ffd700);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    animation: cracks-flicker 0.2s infinite;
+}
+
+@keyframes cracks-flicker {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+}
+
+/* --- EFFET GLITCH ULTIMATE EXTRÊME (PRESTIGE 2) --- */
+.effect-ultimate-glitch {
+    animation: ultimate-glitch 0.1s infinite;
+    filter: drop-shadow(0 0 25px #fff);
+    position: relative;
+}
+
+@keyframes ultimate-glitch {
+    0% { transform: translate(0) skew(0deg); clip-path: inset(0 0 0 0); filter: hue-rotate(0deg) brightness(1) contrast(2); }
+    10% { transform: translate(-12px, 8px) skew(5deg); clip-path: inset(15% 0 45% 0); filter: hue-rotate(90deg) brightness(3); }
+    20% { transform: translate(12px, -8px) skew(-10deg); clip-path: inset(50% 0 10% 0); filter: hue-rotate(180deg) contrast(4); }
+    30% { transform: translate(-18px, -4px) skew(20deg); clip-path: inset(0 25% 0 50%); filter: brightness(0.5); }
+    40% { transform: translate(18px, 4px) skew(-20deg); clip-path: inset(70% 0 5% 0); filter: brightness(4) hue-rotate(270deg); }
+    50% { transform: translate(-5px, 15px); clip-path: inset(10% 0 80% 0); }
+    60% { transform: translate(5px, -15px) scaleY(1.5); clip-path: inset(40% 50% 40% 0); }
+    70% { transform: translate(0) scaleX(1.2); filter: invert(1); }
+    80% { transform: translate(-10px, -10px) skew(15deg); clip-path: inset(0 0 90% 0); }
+    90% { transform: translate(10px, 10px) skew(-15deg); clip-path: inset(85% 0 0 0); }
+    100% { transform: translate(0) skew(0deg); }
+}
+
+
+.prestige-2-aura {
+    animation: prestige-2-pulse 0.5s infinite alternate;
+}
+
+@keyframes prestige-2-pulse {
+    from { filter: drop-shadow(0 0 20px #fff) contrast(1); }
+    to { filter: drop-shadow(0 0 40px #000) contrast(2) brightness(1.5); }
+}
+
     position: fixed;
     inset: 0;
     z-index: 1000000;
